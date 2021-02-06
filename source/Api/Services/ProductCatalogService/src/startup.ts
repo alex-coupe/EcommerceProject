@@ -2,22 +2,12 @@ import express from 'express';
 import('./Models/ImageSchema');
 import('./Models/CategorySchema');
 import('./Models/ProductSchema');
-import Routes from "./Routes/Routes";
-import mongoose from 'mongoose';
+import context from './DatabaseContext';
+import ProductsController from './Controllers/ProductsController';
 
 const app = express();
-mongoose.set('useCreateIndex', true);
+const db = context;
 
-
-try {
-mongoose.connect('mongodb+srv://admin:admin@cluster0.al1l0.mongodb.net/test?retryWrites=true&w=majority',  { useNewUrlParser: true, useUnifiedTopology: true });
-}
-catch (error)
-{
-    console.log(error);
-}
-
-const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
@@ -26,15 +16,16 @@ db.once('open', function() {
 const port:number = 5000;
 
 app.set("port", port);
+const controller = new ProductsController();
 
-const router = new Routes();
+app.get("/api/v1/products",  controller.GetAll);
 
-app.use('api/v1/products', router.routes);
-app.get("/api/v1/products", (req,res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.statusCode = 200;
-    res.send("Hello World");
-    res.end();
-});
+app.get("/api/v1/products/:_id", controller.GetById);
+
+app.post("/api/v1/products/", controller.Create);
+
+app.put("/api/v1/products/:_id", controller.Update);
+
+app.delete("/api/v1/products/:_id", controller.Delete);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

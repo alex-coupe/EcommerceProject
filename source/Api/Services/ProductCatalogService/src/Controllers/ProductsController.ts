@@ -1,5 +1,4 @@
 import IProduct from '../Interfaces/IProduct';
-import Product from '../Models/ProductSchema'
 import ProductRepository from '../Repositories/ProductRepository';
 
 import express from 'express';
@@ -18,19 +17,31 @@ export default class ProductsController{
     };
 
     
-    GetById = (id:number) => {
-
+    GetById = (req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 200;
+      res.send(`Hello World from get by id:${req.params._id}`);
+      res.end();
     };
 
-    Create = (entity: typeof Product) => {
-
+    Create = (req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 200;
+      res.send("Hello World from post");
+      res.end();
     };
 
-    Update = (entity: typeof Product) => {
-
+    Update = (req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 200;
+      res.send("Hello World from put");
+      res.end();
     };
     
-    Delete = (id: number) => {
-
+    Delete = (req: express.Request, res: express.Response) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 200;
+      res.send(`Hello World from delete id:${req.params._id}`);
+      res.end();
     };
 }

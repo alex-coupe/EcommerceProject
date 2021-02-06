@@ -10,11 +10,11 @@ export default class Routes {
     }
     get routes () {
         var controller = this._productsController;
-        router.get("/api/v1/products", controller.GetAll);
-        router.get("/api/v1/products/:_id", controller.GetById);
-        router.post("/api/v1/products/", controller.Create);
-        router.put("/api/v1/products/:_id", controller.Update);
-        router.delete("/api/v1/products/:_id", controller.Delete);
+        router.get("api/v1/products", controller.GetAll);
+        router.get("api/v1/products/:_id", controller.GetById);
+        router.post("api/v1/products/", controller.Create);
+        router.put("api/v1/products/:_id", controller.Update);
+        router.delete("api/v1/products/:_id", controller.Delete);
         
         return router;
     }

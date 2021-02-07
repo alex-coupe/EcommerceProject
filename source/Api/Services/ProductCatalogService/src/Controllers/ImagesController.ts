@@ -1,19 +1,19 @@
-import IProduct from '../Interfaces/IProduct';
-import ProductRepository from '../Repositories/ProductRepository';
-
+import IImage from '../Interfaces/IImage';
+import ImageRepository from '../Repositories/ImageRepository';
 import express from 'express';
-export default class ProductsController{
-    _productRepository: ProductRepository
+
+export default class ImagesController{
+    _imageRepository: ImageRepository
  
     constructor() {
-       this._productRepository = new ProductRepository();
+       this._imageRepository = new ImageRepository();
     }
 
     GetAll = async (req: express.Request, res: express.Response) => {
-      const products:IProduct[] = await this._productRepository.GetAll();
+      const images:IImage[] = await this._imageRepository.GetAll();
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.json(products);
+      res.json(images);
     };
 
     

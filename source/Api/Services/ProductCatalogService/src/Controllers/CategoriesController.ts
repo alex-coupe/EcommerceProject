@@ -1,19 +1,19 @@
-import IProduct from '../Interfaces/IProduct';
-import ProductRepository from '../Repositories/ProductRepository';
-
+import ICategory from '../Interfaces/ICategory';
+import CategoryRepository from '../Repositories/CategoryRepository';
 import express from 'express';
-export default class ProductsController{
-    _productRepository: ProductRepository
+
+export default class CategoriesController{
+    _categoryRepository: CategoryRepository
  
     constructor() {
-       this._productRepository = new ProductRepository();
+       this._categoryRepository = new CategoryRepository();
     }
 
     GetAll = async (req: express.Request, res: express.Response) => {
-      const products:IProduct[] = await this._productRepository.GetAll();
+      const categories:ICategory[] = await this._categoryRepository.GetAll();
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.json(products);
+      res.json(categories);
     };
 
     

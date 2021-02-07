@@ -1,5 +1,4 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import('./Models/ImageSchema');
 import('./Models/CategorySchema');
 import('./Models/ProductSchema');
@@ -10,14 +9,13 @@ import ImagesController from './Controllers/ImagesController';
 
 const app = express();
 const db = context;
-dotenv.config();
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function() {
   console.log("connected to Mongo");
 });
-const port:number = parseInt(process.env.SERVER_PORT!) || 5000;
+const port:number = 5001;
 
 app.set("port", port);
 

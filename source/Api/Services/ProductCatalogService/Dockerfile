@@ -1,6 +1,6 @@
 FROM node:14
 WORKDIR /usr/src/app
-COPY . .
+COPY ./Services/ProductCatalogService/package*.json ./
 RUN npm install
-EXPOSE 5001
+COPY ./Services/ProductCatalogService/ .
 CMD [ "npm", "start" ]

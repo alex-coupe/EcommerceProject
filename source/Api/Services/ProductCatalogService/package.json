@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "start": "node ./build/startup.js"
+    "start": "node ./src/startup.js"
   },
   "author": "",
   "license": "ISC"

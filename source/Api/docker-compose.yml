@@ -3,29 +3,34 @@ version: "3"
 networks:
   services-network:
     driver: bridge
+  products-network:
+    driver: bridge
 
 services:
   api_gateway:
     networks: 
         - services-network
     build:
-    context: .
-    dockerfile: ./Gateway/Dockerfile
+      context: .
+      dockerfile: ./Gateway/Dockerfile
     ports: 
         - 5000:5000 
   products_api:
     networks: 
-        - services-network 
+        - services-network
+        - products-network 
     build:
       context: .
       dockerfile: ./Services/ProductCatalogService/Dockerfile
-    ports: 
+    ports:
         - 5001:5001
     depends_on:
         - mongodb-products
 
   mongodb-products:
-    image: mongo:latest 
+    image: mongo:latest
+    networks: 
+        - products-network 
     volumes:
         - ~/var/etc/product-service-data:/data/db
     restart: unless-stopped

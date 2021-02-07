@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APIGateway
+namespace Gateway
 {
     public class Startup
     {
@@ -30,7 +30,7 @@ namespace APIGateway
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "APIGateway", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway", Version = "v1" });
             });
         }
 
@@ -41,7 +41,7 @@ namespace APIGateway
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "APIGateway v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway v1"));
             }
 
             app.UseHttpsRedirection();

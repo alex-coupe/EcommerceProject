@@ -2,9 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>4eba4e74-da1a-4a8e-afe6-c61ab0a614ef</UserSecretsId>
+    <UserSecretsId>8789aaa3-54e4-47a1-8606-43c6f985049b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <AssemblyName>ApiGateway</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

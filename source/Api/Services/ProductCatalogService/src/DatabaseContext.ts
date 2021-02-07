@@ -9,7 +9,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect(url, {
     useNewUrlParser: true,
     user: user,
-    pass: password
+    pass: password,
+    useUnifiedTopology:true
 }).then(() => {
     console.log('successfully connected to the database');
 }).catch(err => {

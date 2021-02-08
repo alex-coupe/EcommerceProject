@@ -1,3 +1,5 @@
+using Gateway.Caches;
+using Gateway.DataModels;
 using Gateway.DataModels.Components;
 using Gateway.DataServices;
 using Gateway.Interfaces;
@@ -29,9 +31,17 @@ namespace Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IDataService<Category>, CategoryService>();
             services.AddScoped<IDataService<Product>, ProductService>();
+            services.AddScoped<IDataService<Cart>, CartService>();
+            services.AddScoped<IDataService<Inventory>, InventoryService>();
+            services.AddScoped<IDataService<RelatedProduct>, RelatedProductService>();
+            services.AddScoped<IDataService<Review>, ReviewService>();
+            services.AddScoped<IDataService<Checkout>, CheckoutService>();
+            services.AddScoped<IDataCache<Cart>, CartCache>();
+            services.AddSingleton<IDataCache<IEnumerable<Category>>, CategoryCache>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

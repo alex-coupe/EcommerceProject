@@ -18,5 +18,6 @@ namespace Gateway.DataModels.Components
 
         public string Slug { get; set; }
         public Image ProductImage { get; set; }
+        public Category Category { get; set; } 
     }
 }

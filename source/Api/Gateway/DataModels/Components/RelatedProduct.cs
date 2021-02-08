@@ -8,7 +8,5 @@ namespace Gateway.DataModels.Components
     public class RelatedProduct
     {
         public Product ProductDetails { get; set; }
-
-        public string PromoText { get; set; }
     }
 }

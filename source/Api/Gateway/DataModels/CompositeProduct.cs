@@ -12,12 +12,9 @@ namespace Gateway.DataModels
     {
         public Product ProductDetails { get; set; }
 
-        public Category Category { get; set; }
-
         public IEnumerable<RelatedProduct> RelatedProducts { get; set; }
 
-        public IEnumerable<Review> Reviews { get; set; }
+        public IEnumerable<Review> Reviews { get; set;}
 
-       
-    }
+        public Inventory Inventory { get; set; }
 }

@@ -5,6 +5,8 @@ networks:
     driver: bridge
   products-network:
     driver: bridge
+  categories-network:
+    driver: bridge
 
 services:
   api_gateway:
@@ -16,7 +18,7 @@ services:
     ports: 
         - 5000:5000 
   
-  products_api:
+  products_service:
     networks: 
         - services-network
         - products-network 
@@ -27,16 +29,41 @@ services:
         - 5001:5001
     depends_on:
         - mongodb-products
+  
+  categories_service:
+    networks: 
+        - services-network
+        - categories-network 
+    build:
+      context: .
+      dockerfile: ./Services/CategoryService/Dockerfile
+    ports:
+        - 5002:5002
+    depends_on:
+        - mongodb-categories
 
   mongodb-products:
     image: mongo:latest
     networks: 
         - products-network 
     volumes:
-        - ~/var/etc/product-service-data:/data/db
+        - ~/var/etc/product-service-data:/data/db/product
     restart: unless-stopped
     ports:
         - 27017:27017
+    environment: 
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=root
+  
+  mongodb-categories:
+    image: mongo:latest
+    networks: 
+        - categories-network 
+    volumes:
+        - ~/var/etc/category-service-data:/data/db/category
+    restart: unless-stopped
+    ports:
+        - 27017:27018
     environment: 
         - MONGO_INITDB_ROOT_USERNAME=root
         - MONGO_INITDB_ROOT_PASSWORD=root

@@ -16,6 +16,13 @@ export default class ProductsController{
       res.json(products);
     };
 
+    GetByCategory = (req: express.Request, res: express.Response) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 200;
+        res.send(`Hello World from get by id:${req.params.category}`);
+        res.end();
+    };
+
     
     GetBySlug = (req: express.Request, res: express.Response) => {
       res.setHeader('Content-Type', 'application/json');

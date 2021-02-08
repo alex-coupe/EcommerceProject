@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 mongoose.set('useCreateIndex', true);
-const url:string = 'mongodb://localhost:27017/';
+const url:string = 'mongodb://localhost:27018/';
 const user:string = 'root';
 const password:string = 'root';
 

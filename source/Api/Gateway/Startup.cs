@@ -1,3 +1,6 @@
+using Gateway.DataModels.Components;
+using Gateway.DataServices;
+using Gateway.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,7 +29,9 @@ namespace Gateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient();
+            services.AddScoped<IHttpService, HttpService>();
+            services.AddScoped<IDataService<Category>, CategoryService>();
+            services.AddScoped<IDataService<Product>, ProductService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

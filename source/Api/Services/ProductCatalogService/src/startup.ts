@@ -25,6 +25,8 @@ app.get("/api/v1/products",  _productsController.GetAll);
 
 app.get("/api/v1/products/:slug", _productsController.GetBySlug);
 
+app.get("/api/v1/categoryproducts/:category", _productsController.GetByCategory);
+
 app.post("/api/v1/products", _productsController.Create);
 
 app.put("/api/v1/products/:slug", _productsController.Update);

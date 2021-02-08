@@ -9,7 +9,8 @@ CategoryService - 5002
 CartService - 5003
 CheckoutService - 5004
 InventoryService - 5005
-RelatedProductservice - 5006
-Reviewservice - 5007
+RelatedProductService - 5006
+ReviewService - 5007
+ImageService - 5008
 
 Possible future services include a search service and a promo service

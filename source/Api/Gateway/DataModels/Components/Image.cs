@@ -8,6 +8,7 @@ namespace Gateway.DataModels.Components
 {
     public class Image
     {
+        public string Id { get; set; }
         public string FilePath { get; set; }
 
         public string AltText { get; set; }

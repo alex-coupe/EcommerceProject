@@ -26,12 +26,14 @@ namespace Gateway.Controllers
         private IDataService<Review> _reviewService;
         private IDataService<RelatedProduct> _relatedProductsService;
         private IDataService<Inventory> _inventoryService;
+        private IDataService<Image> _imageService;
         private IDataCache<Cart> _cartCache;
         private IDataCache<IEnumerable<Category>> _categoryCache;
 
         public GatewayController(IDataService<Category> categoriesService, IDataService<Product> productsService, IDataService<Cart> cartService,
             IDataService<Checkout> checkoutService, IDataService<Review> reviewService, IDataService<RelatedProduct> relatedProductsService,
-            IDataService<Inventory> inventoryService, IDataCache<Cart> cartCache, IDataCache<IEnumerable<Category>> categoryCache)
+            IDataService<Inventory> inventoryService, IDataCache<Cart> cartCache, IDataCache<IEnumerable<Category>> categoryCache,
+            IDataService<Image> imageService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;
@@ -43,19 +45,20 @@ namespace Gateway.Controllers
             _cartCache = cartCache;
             _categoryCache = categoryCache;
             _categoryCache.Cache = new List<Category>();
+            _imageService = imageService;
         }
 
         [HttpGet]
-        [Route("/ProductDetails/{slug}")]
-        public async Task<ActionResult<CompositeProduct>> GetProductDetails(string slug)
+        [Route("/ProductDetails/{Slug}")]
+        public async Task<ActionResult<CompositeProduct>> GetProductDetails(string Slug)
         {
            
             try
             {
-                var productTask = Task.Run(() => _productsService.Get(slug));
-                var reviewsTask = Task.Run(() => _reviewService.GetAll(slug));
-                var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(slug));
-                var inventoryTask = Task.Run(() => _inventoryService.Get(slug));
+                var productTask = Task.Run(() => _productsService.Get(Slug));
+                var reviewsTask = Task.Run(() => _reviewService.GetAll(Slug));
+                var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(Slug));
+                var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
 
                 await Task.WhenAll(productTask, reviewsTask, relatedProductsTask, inventoryTask);
 
@@ -90,6 +93,36 @@ namespace Gateway.Controllers
         }
 
         [HttpPost]
+        [Route("/Images")]
+        public async Task<ActionResult<Image>> PostImage(IFormFile file, string altText)
+        {
+            string[] permittedExtensions = { ".png", ".jpg", ".jpeg", ".gif" };
+            var _fileSizeLimit = 5000;
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext) || file.Length > _fileSizeLimit)
+                return null;
+
+            try
+            {
+                var filePath = Path.GetTempFileName();
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var response = _imageService.Post(new Image { FilePath = filePath, AltText = altText });
+
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
         [Route("/Products")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
@@ -97,9 +130,42 @@ namespace Gateway.Controllers
             {
                 var response = await _productsService.Post(product);
 
-                return Ok(product);
+                return Ok(response);
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("/Images")]
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
+        {
+            try
+            {
+                var response = await _imageService.GetAll("");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("/Reviews")]
+        public async Task<ActionResult<Review>> PostReview(Review review)
+        {
+            try
+            {
+                var response = await _reviewService.Post(review);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

@@ -1,5 +1,4 @@
 import {Document} from 'mongoose';
-import ICategory from './ICategory';
 import IImage from './IImage';
 
 
@@ -10,5 +9,4 @@ export default interface IProduct extends Document {
     Price: number;
     Slug: string;
     Image: IImage;
-    Category: ICategory; 
 }

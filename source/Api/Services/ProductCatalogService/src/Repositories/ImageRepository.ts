@@ -1,6 +1,6 @@
 import IImage from '../Interfaces/IImage';
 import IRepository from '../Interfaces/IRepository';
-import Image from '../Models/CategorySchema';
+import Image from '../Models/ImageSchema';
 
 export default class ImageRepository implements IRepository<IImage>
 {

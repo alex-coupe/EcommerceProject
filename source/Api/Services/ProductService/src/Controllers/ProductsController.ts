@@ -9,46 +9,40 @@ export default class ProductsController{
        this._productRepository = new ProductRepository();
     }
 
-    GetAll = async (req: express.Request, res: express.Response) => {
-      const products:IProduct[] = await this._productRepository.GetAll();
+    GetByCategory = async (req: express.Request, res: express.Response) => {
+      const products:IProduct[] = await this._productRepository.GetAll(req.params.category);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.json(products);
     };
 
-    GetByCategory = (req: express.Request, res: express.Response) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.statusCode = 200;
-        res.send(`Hello World from get by id:${req.params.category}`);
-        res.end();
-    };
-
     
-    GetBySlug = (req: express.Request, res: express.Response) => {
+    GetBySlug = async (req: express.Request, res: express.Response) => {
+      const product:IProduct = await this._productRepository.GetOne(req.params.slug);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.send(`Hello World from get by id:${req.params.slug}`);
-      res.end();
+      res.json(product);
     };
 
-    Create = (req: express.Request, res: express.Response) => {
+    Create = async (req: express.Request, res: express.Response) => {
+      const product = await this._productRepository.CreateNew(req.body);
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.send("Hello World from post");
-      res.end();
+      res.json(product);
     };
 
     Update = (req: express.Request, res: express.Response) => {
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.send("Hello World from put");
+      res.send("Route Not Implemented");
       res.end();
     };
     
     Delete = (req: express.Request, res: express.Response) => {
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
-      res.send(`Hello World from delete id:${req.params.slug}`);
+      res.send(`Route Not Implemented`);
       res.end();
     };
 }

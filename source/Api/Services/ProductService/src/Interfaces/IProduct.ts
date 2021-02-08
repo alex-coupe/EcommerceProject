@@ -1,6 +1,4 @@
 import {Document} from 'mongoose';
-import IImage from './IImage';
-
 
 export default interface IProduct extends Document {
     Name: string;
@@ -8,5 +6,8 @@ export default interface IProduct extends Document {
     Description: string;
     Price: number;
     Slug: string;
-    Image: IImage;
+    ImagePath: string;
+    ImageAltText: string,
+    Category: string, 
+    SubCategories: string[]
 }

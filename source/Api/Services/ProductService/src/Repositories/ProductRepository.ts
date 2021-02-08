@@ -4,24 +4,19 @@ import Product from '../Models/ProductSchema';
 
 export default class ProductRepository implements IRepository<IProduct>
 {
-     GetAll(): Promise<IProduct[]> {
-        return Product.collection.find().toArray();
+     GetAll(category:string): Promise<IProduct[]> {
+        return Product.collection.find({SubCategory : category }).toArray();
     }
     GetOne(slug: string): Promise<IProduct> {
-        throw new Error('Method not implemented.');
+        return Product.collection.findOne({Slug : slug });
     }
-    Create(arg: IProduct): IProduct {
-        throw new Error('Method not implemented.');
+    CreateNew(item: IProduct): Promise<IProduct> {
+        return item.save();
     }
     Update(arg: IProduct): IProduct {
         throw new Error('Method not implemented.');
     }
     Delete(slug: string): void {
         throw new Error('Method not implemented.');
-    }
-    SaveChanges(item:IProduct): Promise<IProduct> {
-        return item.save();
-    }
-    
-    
+    }    
 }

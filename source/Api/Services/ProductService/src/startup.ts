@@ -19,7 +19,6 @@ const _productsController = new ProductsController();
 
 
 //Products Routes
-app.get("/api/v1/products",  _productsController.GetAll);
 
 app.get("/api/v1/products/:slug", _productsController.GetBySlug);
 

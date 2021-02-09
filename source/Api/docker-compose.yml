@@ -3,23 +3,11 @@ version: "3"
 networks:
   services-network:
     driver: bridge
-  products-network:
+  mysql-network:
     driver: bridge
-  categories-network:
+  mongo-network:
     driver: bridge
-  images-network:
-    driver: bridge
-  cart-network:
-    driver: bridge
-  checkout-network:
-    driver: bridge
-  inventory-network:
-    driver: bridge
-  relatedproduct-network:
-    driver: bridge
-  review-network:
-    driver: bridge
-  
+    
   #####################################################
 services:
   api_gateway:
@@ -34,93 +22,92 @@ services:
   products_service:
     networks: 
         - services-network
-        - products-network 
+        - mongo-network 
     build:
       context: .
       dockerfile: ./Services/ProductCatalogService/Dockerfile
     ports:
         - 5001:5001
     depends_on:
-        - mongodb-products
+        - mongodb
   ###################################################
   
   categories_service:
     networks: 
         - services-network
-        - categories-network 
+        - mongo-network 
     build:
       context: .
       dockerfile: ./Services/CategoryService/Dockerfile
     ports:
         - 5002:5002
     depends_on:
-        - mongodb-categories
+        - mongodb
   ##################################################
   cart_service:
     networks: 
         - services-network
-        - cart-network 
+        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/CartService/Dockerfile
     ports:
         - 5003:5003
     depends_on:
-        - redis-cart
-        - mysql-cart
+        - mysql
   ##################################################
   checkout_service:
     networks: 
         - services-network
-        - checkout-network 
+        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/CheckoutService/Dockerfile
     ports:
         - 5004:5004
     depends_on:
-        - mysql-checkout
+        - mysql
   #################################################
   inventory_service:
     networks: 
         - services-network
-        - inventory-network 
+        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/InventoryService/Dockerfile
     ports:
         - 5005:5005
     depends_on:
-        - postgres-inventory
+        - mysql
   ##################################################
   relatedproduct_service:
     networks: 
         - services-network
-        - relatedproduct-network 
+        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/RelatedProductService/Dockerfile
     ports:
         - 5006:5006
     depends_on:
-        - postgres-relatedproduct
+        - mysql
   ##################################################
   review_service:
     networks: 
         - services-network
-        - review-network 
+        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/ReviewService/Dockerfile
     ports:
         - 5007:5007
     depends_on:
-        - mysql-review
+        - mysql
   ##################################################
   images_service:
     networks: 
         - services-network
-        - images-network 
+        - mongo-network 
     volumes:
         - ~/var/etc/image-service-data:/data/files/images
     build:
@@ -129,14 +116,14 @@ services:
     ports:
         - 5008:5008
     depends_on:
-        - mongodb-categories
+        - mongodb
 
 ## DATABASES
 
-  mongodb-products:
+  mongodb:
     image: mongo:latest
     networks: 
-        - products-network 
+        - mongo-network 
     volumes:
         - ~/var/etc/product-service-data:/data/db/products
     restart: unless-stopped
@@ -146,101 +133,19 @@ services:
         - MONGO_INITDB_ROOT_USERNAME=root
         - MONGO_INITDB_ROOT_PASSWORD=root
   
-  mongodb-categories:
-    image: mongo:latest
-    networks: 
-        - categories-network 
-    volumes:
-        - ~/var/etc/category-service-data:/data/db/categories
-    restart: unless-stopped
-    ports:
-        - 27017:27018
-    environment: 
-        - MONGO_INITDB_ROOT_USERNAME=root
-        - MONGO_INITDB_ROOT_PASSWORD=root
-
-  mongodb-images:
-    image: mongo:latest
-    networks: 
-        - images-network 
-    volumes:
-        - ~/var/etc/category-service-data:/data/db/images
-    restart: unless-stopped
-    ports:
-        - 27017:27019
-    environment: 
-        - MONGO_INITDB_ROOT_USERNAME=root
-        - MONGO_INITDB_ROOT_PASSWORD=root
-
-  mysql-cart:
+  mysql:
     image: mysql:latest
     networks: 
-        - cart-network 
+        - mysql-network 
     volumes:
-        - ~/var/etc/cart-service-data:/data/db/mysql/cart
+        - ~/var/etc/mysql-data:/data/db/mysql
     restart: unless-stopped
     ports:
         - 3306:3306
     environment: 
         - MYSQL_ROOT_PASSWORD=root
-
-   redis-cart:
-    image: redis:latest
-    networks: 
-        - cart-network 
-    volumes:
-        - ~/var/etc/cart-service-data:/data/db/redis/cart
-    restart: unless-stopped
-    ports:
-        - 6379:6379
-
-  mysql-checkout:
-    image: mysql:latest
-    networks: 
-        - checkout-network 
-    volumes:
-        - ~/var/etc/checkout-service-data:/data/db/mysql/checkout
-    restart: unless-stopped
-    ports:
-        - 3306:3307
-    environment: 
-        - MYSQL_ROOT_PASSWORD=root
-
-  mysql-review:
-    image: mysql:latest
-    networks: 
-        - review-network 
-    volumes:
-        - ~/var/etc/review-service-data:/data/db/mysql/review
-    restart: unless-stopped
-    ports:
-        - 3306:3308
-    environment: 
-        - MYSQL_ROOT_PASSWORD=root
-
-  postgres-inventory:
-    image: postgres:latest
-    networks: 
-        - inventory-network 
-    volumes:
-        - ~/var/etc/inventory-service-data:/data/db/mysql/inventory
-    restart: unless-stopped
-    ports:
-        - 5432:5432
-    environment: 
-        - POSTGRES_PASSWORD=mysecretpassword
-
-  postgres-relatedproduct:
-    image: postgres:latest
-    networks: 
-        - relatedproduct-network 
-    volumes:
-        - ~/var/etc/relatedproduct-service-data:/data/db/mysql/relatedproduct
-    restart: unless-stopped
-    ports:
-        - 5432:5433
-    environment: 
-        - POSTGRES_PASSWORD=mysecretpassword  
-       
-  
- 
+        - MYSQL_DATABASE=CartService
+        - MYSQL_DATABASE=CheckoutService
+        - MYSQL_DATABASE=InventoryService
+        - MYSQL_DATABASE=RelatedProductsService
+        - MYSQL_DATABASE=ReviewService

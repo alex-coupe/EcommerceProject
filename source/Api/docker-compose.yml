@@ -3,12 +3,8 @@ version: "3"
 networks:
   services-network:
     driver: bridge
-  mysql-network:
-    driver: bridge
-  mongo-network:
-    driver: bridge
-    
-  #####################################################
+      
+
 services:
   api_gateway:
     networks: 
@@ -18,96 +14,87 @@ services:
       dockerfile: ./Gateway/Dockerfile
     ports: 
         - 5000:5000 
-  ####################################################
+
   products_service:
     networks: 
         - services-network
-        - mongo-network 
     build:
       context: .
       dockerfile: ./Services/ProductCatalogService/Dockerfile
     ports:
         - 5001:5001
     depends_on:
-        - mongodb
-  ###################################################
+        - db
   
   categories_service:
     networks: 
         - services-network
-        - mongo-network 
     build:
       context: .
       dockerfile: ./Services/CategoryService/Dockerfile
     ports:
         - 5002:5002
     depends_on:
-        - mongodb
-  ##################################################
+        - db
+  
   cart_service:
     networks: 
-        - services-network
-        - mysql-network 
+        - services-network 
     build:
       context: .
       dockerfile: ./Services/CartService/Dockerfile
     ports:
         - 5003:5003
     depends_on:
-        - mysql
-  ##################################################
+        - db
+
   checkout_service:
     networks: 
-        - services-network
-        - mysql-network 
+        - services-network 
     build:
       context: .
       dockerfile: ./Services/CheckoutService/Dockerfile
     ports:
         - 5004:5004
     depends_on:
-        - mysql
-  #################################################
+        - db
+
   inventory_service:
     networks: 
         - services-network
-        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/InventoryService/Dockerfile
     ports:
         - 5005:5005
     depends_on:
-        - mysql
-  ##################################################
+        - db
+  
   relatedproduct_service:
     networks: 
         - services-network
-        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/RelatedProductService/Dockerfile
     ports:
         - 5006:5006
     depends_on:
-        - mysql
-  ##################################################
+        - db
+
   review_service:
     networks: 
         - services-network
-        - mysql-network 
     build:
       context: .
       dockerfile: ./Services/ReviewService/Dockerfile
     ports:
         - 5007:5007
     depends_on:
-        - mysql
-  ##################################################
+        - db
+
   images_service:
     networks: 
         - services-network
-        - mongo-network 
     volumes:
         - ~/var/etc/image-service-data:/data/files/images
     build:
@@ -116,36 +103,19 @@ services:
     ports:
         - 5008:5008
     depends_on:
-        - mongodb
+        - db
 
-## DATABASES
-
-  mongodb:
-    image: mongo:latest
+  db:
+    image: "mcr.microsoft.com/mssql/server"
     networks: 
-        - mongo-network 
+        - services-network 
     volumes:
-        - ~/var/etc/product-service-data:/data/db/products
+        - ~/var/etc/services-data:/data/db/
     restart: unless-stopped
     ports:
         - 27017:27017
     environment: 
-        - MONGO_INITDB_ROOT_USERNAME=root
-        - MONGO_INITDB_ROOT_PASSWORD=root
+        SA_PASSWORD: "Your_password123"
+        ACCEPT_EULA: "Y"
+       
   
-  mysql:
-    image: mysql:latest
-    networks: 
-        - mysql-network 
-    volumes:
-        - ~/var/etc/mysql-data:/data/db/mysql
-    restart: unless-stopped
-    ports:
-        - 3306:3306
-    environment: 
-        - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_DATABASE=CartService
-        - MYSQL_DATABASE=CheckoutService
-        - MYSQL_DATABASE=InventoryService
-        - MYSQL_DATABASE=RelatedProductsService
-        - MYSQL_DATABASE=ReviewService

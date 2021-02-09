@@ -17,5 +17,9 @@ namespace Gateway.DataModels
         public decimal Tax { get; set; }
 
         public decimal Gross { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime LastUpdated { get; set; }
     }
 }

@@ -96,23 +96,9 @@ namespace Gateway.Controllers
         [Route("/Images")]
         public async Task<ActionResult<Image>> PostImage(IFormFile file, string altText)
         {
-            string[] permittedExtensions = { ".png", ".jpg", ".jpeg", ".gif" };
-            var _fileSizeLimit = 5000;
-            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext) || file.Length > _fileSizeLimit)
-                return null;
-
             try
             {
-                var filePath = Path.GetTempFileName();
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                var response = _imageService.Post(new Image { FilePath = filePath, AltText = altText });
+                var response = await _imageService.PostFile(file, altText);
 
                 return Ok(response);
             }
@@ -235,7 +221,7 @@ namespace Gateway.Controllers
         }
 
         [HttpGet]
-        [Route("/Category")]
+        [Route("/Categories")]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             try

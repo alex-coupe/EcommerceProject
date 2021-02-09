@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,5 +16,6 @@ namespace Gateway.Interfaces
         Task<T> Put(T entity);
 
         Task Delete(string slug);
+        Task<T> PostFile(IFormFile file, string altText);
     }
 }

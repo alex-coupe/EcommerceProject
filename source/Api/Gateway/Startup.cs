@@ -40,6 +40,7 @@ namespace Gateway
             services.AddScoped<IDataService<RelatedProduct>, RelatedProductService>();
             services.AddScoped<IDataService<Review>, ReviewService>();
             services.AddScoped<IDataService<Checkout>, CheckoutService>();
+            services.AddScoped<IDataService<Image>, ImageService>();
             services.AddScoped<IDataCache<Cart>, CartCache>();
             services.AddSingleton<IDataCache<IEnumerable<Category>>, CategoryCache>();
             services.AddControllers();

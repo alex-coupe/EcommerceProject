@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gateway.DataModels.Components;
+using Microsoft.AspNetCore.Http;
 
 namespace Gateway.DataServices
 {
@@ -36,9 +37,16 @@ namespace Gateway.DataServices
             return await _httpService.Post<Image>($"{baseUri}api/v1/images", entity);
         }
 
+        public Task<Image> PostFile(IFormFile file, string altText)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Image> Put(Image entity)
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

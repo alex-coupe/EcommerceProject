@@ -1,5 +1,6 @@
 ﻿using Gateway.DataModels;
 using Gateway.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +36,16 @@ namespace Gateway.DataServices
             return await _httpService.Post<Cart>($"{baseUri}api/v1/cart", entity);
         }
 
+        public Task<Cart> PostFile(IFormFile file, string altText)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Cart> Put(Cart entity)
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

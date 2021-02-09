@@ -1,7 +1,9 @@
 ﻿using Gateway.DataModels;
 using Gateway.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -39,6 +41,33 @@ namespace Gateway.DataServices
             return await sendRequest<T>(request);
         }
 
+        public async Task<T> PostFile<T>(string uri, IFormFile file, string text)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            if (file != null && file.Length > 0)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(file.OpenReadStream()))
+                    data = br.ReadBytes((int)file.OpenReadStream().Length);
+
+                StringContent alt = new StringContent(text);
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+
+
+                MultipartFormDataContent multiContent = new MultipartFormDataContent();
+
+
+                multiContent.Add(bytes, "file", file.FileName);
+                multiContent.Add(alt, "altText");
+
+                request.Content = multiContent;
+
+                return await sendRequest<T>(request);
+            }
+            else
+                throw new BadHttpRequestException("Bad File", 500);
+        }
         public async Task<T> Put<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, uri);

@@ -1,5 +1,6 @@
 ﻿using Gateway.DataModels;
 using Gateway.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,11 @@ namespace Gateway.DataServices
         }
 
         public Task<Inventory> Post(Inventory entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Inventory> PostFile(IFormFile file, string altText)
         {
             throw new NotImplementedException();
         }

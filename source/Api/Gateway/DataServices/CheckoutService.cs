@@ -1,5 +1,6 @@
 ﻿using Gateway.DataModels;
 using Gateway.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,11 @@ namespace Gateway.DataServices
         public async Task<Checkout> Post(Checkout entity)
         {
             return await _httpService.Post<Checkout>($"{baseUri}api/v1/checkout", entity);
+        }
+
+        public Task<Checkout> PostFile(IFormFile file, string altText)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Checkout> Put(Checkout entity)

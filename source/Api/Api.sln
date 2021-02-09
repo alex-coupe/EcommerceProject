@@ -3,30 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.csproj", "{4769DBEB-5C43-488E-8379-B4967D65EC1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Gateway\Gateway.csproj", "{4769DBEB-5C43-488E-8379-B4967D65EC1F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{828F833A-5D0E-44E6-BDCE-C50739A4050B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartService", "Services\CartService\CartService.csproj", "{56EBE215-6CA2-408A-8D03-C5A7E22A5592}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartService", "Services\CartService\CartService.csproj", "{56EBE215-6CA2-408A-8D03-C5A7E22A5592}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategoryService", "Services\CategoryService\CategoryService.csproj", "{8C2641E1-93B3-4D65-993C-BD1AE53BC106}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckoutService", "Services\CheckoutService\CheckoutService.csproj", "{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutService", "Services\CheckoutService\CheckoutService.csproj", "{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D654ED8-E111-4B84-9100-DFD637796C84}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService", "Services\ImageService\ImageService.csproj", "{50D50C29-35D0-479F-BF91-46BC2AC0317F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryService", "Services\InventoryService\InventoryService.csproj", "{37B518DA-2589-48CE-8971-EEB22839256E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService", "Services\InventoryService\InventoryService.csproj", "{37B518DA-2589-48CE-8971-EEB22839256E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "Services\ProductService\ProductService.csproj", "{27B02611-33C0-4C0B-8E20-4DA80B000B52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService", "Services\ProductService\ProductService.csproj", "{27B02611-33C0-4C0B-8E20-4DA80B000B52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RelatedProductService", "Services\RelatedProductService\RelatedProductService.csproj", "{B3D3FCBA-F309-4279-98B8-23B3F00410AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelatedProductService", "Services\RelatedProductService\RelatedProductService.csproj", "{B3D3FCBA-F309-4279-98B8-23B3F00410AC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReviewService", "Services\ReviewService\ReviewService.csproj", "{D1007B63-F050-4076-AF83-25B6D1226A81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReviewService", "Services\ReviewService\ReviewService.csproj", "{D1007B63-F050-4076-AF83-25B6D1226A81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,18 +38,10 @@ Global
 		{56EBE215-6CA2-408A-8D03-C5A7E22A5592}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56EBE215-6CA2-408A-8D03-C5A7E22A5592}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56EBE215-6CA2-408A-8D03-C5A7E22A5592}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C2641E1-93B3-4D65-993C-BD1AE53BC106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C2641E1-93B3-4D65-993C-BD1AE53BC106}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C2641E1-93B3-4D65-993C-BD1AE53BC106}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C2641E1-93B3-4D65-993C-BD1AE53BC106}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50D50C29-35D0-479F-BF91-46BC2AC0317F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50D50C29-35D0-479F-BF91-46BC2AC0317F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50D50C29-35D0-479F-BF91-46BC2AC0317F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50D50C29-35D0-479F-BF91-46BC2AC0317F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{37B518DA-2589-48CE-8971-EEB22839256E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37B518DA-2589-48CE-8971-EEB22839256E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B518DA-2589-48CE-8971-EEB22839256E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,9 +64,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{56EBE215-6CA2-408A-8D03-C5A7E22A5592} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
-		{8C2641E1-93B3-4D65-993C-BD1AE53BC106} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
 		{D92FC67F-65CD-44F1-86C2-C7FDEB29DCC7} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
-		{50D50C29-35D0-479F-BF91-46BC2AC0317F} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
 		{37B518DA-2589-48CE-8971-EEB22839256E} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
 		{27B02611-33C0-4C0B-8E20-4DA80B000B52} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}
 		{B3D3FCBA-F309-4279-98B8-23B3F00410AC} = {828F833A-5D0E-44E6-BDCE-C50739A4050B}

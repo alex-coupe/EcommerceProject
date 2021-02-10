@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gateway.DataTransfer.ProductService;
+using Microsoft.EntityFrameworkCore;
 using ProductService.Interfaces;
 using ProductService.Models;
 using System;
@@ -15,28 +16,47 @@ namespace ProductService.Repositories
         {
             _context = context;
         }
-        public void Create(Category category)
+        public void Create(CategoryTransferObject category)
         {
-            _context.Categories.Add(category);
+            var cat = new Category
+            {
+                Name = category.MainCategory,
+                SubCategories = category.SubCategories.Select(sc => new SubCategory
+                {
+                    Name = sc
+                }).ToList()
+            };
+            _context.Categories.Add(cat);
         }
 
-        public async Task<IEnumerable<Category>> GetAll()
+        public async Task<IEnumerable<CategoryTransferObject>> GetAll()
         {
             return await _context.Categories.AsNoTracking()
-                .Include(x => x.SubCategories)
-                .ToListAsync();
+                 .Include(x => x.SubCategories)
+                 .Select(cat => new CategoryTransferObject
+                 {
+                     MainCategory = cat.Name,
+                     SubCategories = cat.SubCategories.Select(x => x.Name).ToList()
+                 }).ToListAsync();
         }
+              
 
-        public async Task<Category> GetOne(string category)
+        public async Task<CategoryTransferObject> GetOne(string category)
         {
             return await _context.Categories.AsNoTracking()
-                .Where(x => x.BaseCategory == category)
+                .Where(x => x.Name == category)
                 .Include(x => x.SubCategories)
+                .Select(cat => new CategoryTransferObject
+                {
+                    MainCategory = cat.Name,
+                    SubCategories = cat.SubCategories.Select(x => x.Name).ToList()
+                })
                 .SingleOrDefaultAsync();
         }
 
-        public void Remove(Category category)
+        public void Remove(int id)
         {
+            var category = _context.Categories.Find(id);
             _context.Categories.Remove(category);
         }
 

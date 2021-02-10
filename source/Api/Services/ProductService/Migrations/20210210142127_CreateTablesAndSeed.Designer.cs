@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductService.Models;
 
 namespace ProductService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210210142127_CreateTablesAndSeed")]
+    partial class CreateTablesAndSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,21 +274,6 @@ namespace ProductService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ProductSubCategory", b =>
-                {
-                    b.Property<int>("ProductsSku")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubCategoriesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsSku", "SubCategoriesId");
-
-                    b.HasIndex("SubCategoriesId");
-
-                    b.ToTable("ProductSubCategory");
-                });
-
             modelBuilder.Entity("CategoryProduct", b =>
                 {
                     b.HasOne("ProductService.Models.Category", null)
@@ -326,21 +313,6 @@ namespace ProductService.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductImage");
-                });
-
-            modelBuilder.Entity("ProductSubCategory", b =>
-                {
-                    b.HasOne("ProductService.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsSku")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProductService.Models.SubCategory", null)
-                        .WithMany()
-                        .HasForeignKey("SubCategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

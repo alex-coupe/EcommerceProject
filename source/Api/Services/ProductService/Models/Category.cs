@@ -9,9 +9,11 @@ namespace ProductService.Models
         public int Id { get; set; }
 
         [Required]
-        public string BaseCategory { get; set; }
+        public string Name { get; set; }
 
-        [Required]
-        public IEnumerable<SubCategory> SubCategories { get; set; }
+        public virtual ICollection<SubCategory> SubCategories { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; }
+
     }
 }

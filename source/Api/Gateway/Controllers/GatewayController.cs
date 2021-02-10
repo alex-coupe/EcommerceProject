@@ -7,11 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text;
 using Gateway.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.IO;
+using Gateway.DataTransfer.ProductService;
 
 namespace Gateway.Controllers
 {
@@ -19,21 +16,19 @@ namespace Gateway.Controllers
     [ApiController]
     public class GatewayController : ControllerBase
     {
-        private IDataService<Category> _categoriesService;
-        private IDataService<Product> _productsService;
+        private IDataService<CategoryTransferObject> _categoriesService;
+        private IDataService<ProductTransferObject> _productsService;
         private IDataService<Cart> _cartService;
         private IDataService<Checkout> _checkoutService;
         private IDataService<Review> _reviewService;
         private IDataService<RelatedProduct> _relatedProductsService;
         private IDataService<Inventory> _inventoryService;
-        private IDataService<Image> _imageService;
-        private IDataCache<Cart> _cartCache;
-        private IDataCache<IEnumerable<Category>> _categoryCache;
+        private IDataService<ImageTransferObject> _imageService;
+       
 
-        public GatewayController(IDataService<Category> categoriesService, IDataService<Product> productsService, IDataService<Cart> cartService,
+        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<ProductTransferObject> productsService, IDataService<Cart> cartService,
             IDataService<Checkout> checkoutService, IDataService<Review> reviewService, IDataService<RelatedProduct> relatedProductsService,
-            IDataService<Inventory> inventoryService, IDataCache<Cart> cartCache, IDataCache<IEnumerable<Category>> categoryCache,
-            IDataService<Image> imageService)
+            IDataService<Inventory> inventoryService,  IDataService<ImageTransferObject> imageService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;
@@ -42,35 +37,32 @@ namespace Gateway.Controllers
             _reviewService = reviewService;
             _relatedProductsService = relatedProductsService;
             _inventoryService = inventoryService;
-            _cartCache = cartCache;
-            _categoryCache = categoryCache;
-            _categoryCache.Cache = new List<Category>();
             _imageService = imageService;
         }
 
         [HttpGet]
-        [Route("/ProductDetails/{Slug}")]
+        [Route("v1/ProductDetails")]
         public async Task<ActionResult<CompositeProduct>> GetProductDetails(string Slug)
         {
            
             try
             {
                 var productTask = Task.Run(() => _productsService.Get(Slug));
-                var reviewsTask = Task.Run(() => _reviewService.GetAll(Slug));
-                var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(Slug));
-                var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
+                //  var reviewsTask = Task.Run(() => _reviewService.GetAll(new string[] { Slug }));
+                // var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(new string[] { Slug }));
+                //  var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
 
-                await Task.WhenAll(productTask, reviewsTask, relatedProductsTask, inventoryTask);
+                await Task.WhenAll(productTask);//, reviewsTask, relatedProductsTask, inventoryTask);
 
                 var product = await productTask;
-                var reviews = await reviewsTask;
-                var relatedProducts = await relatedProductsTask;
-                var inventory = await inventoryTask;
+               // var reviews = await reviewsTask;
+              //  var relatedProducts = await relatedProductsTask;
+              //  var inventory = await inventoryTask;
 
                 var CompositeProduct = new CompositeProduct
                 {
-                    ProductDetails = product,
-                    Reviews = reviews.Select(review => new Review
+                    ProductDetails = product
+               /*     Reviews = reviews.Select(review => new Review
                     {
                         Rating = review.Rating,
                         ReviewBody = review.ReviewBody,
@@ -83,6 +75,7 @@ namespace Gateway.Controllers
                         ProductDetails = relpr.ProductDetails,
                     }).ToList(),
                     Inventory = inventory
+               */
                 };
                 return Ok(CompositeProduct);
             }
@@ -92,9 +85,79 @@ namespace Gateway.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("v1/Images")]
+        public async Task<ActionResult<IEnumerable<ImageTransferObject>>> GetImages()
+        {
+            try
+            {
+                var response = await _imageService.GetAll(new string[0]);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("v1/CategoryProducts/{Category}/{SubCategory}")]
+        public async Task<ActionResult<IEnumerable<CompositeProduct>>> GetCategoryProducts(string Category, string SubCategory)
+        {
+            var CompositeProducts = new List<CompositeProduct>();
+
+            try
+            {
+                var products = await _productsService.GetAll(new string[] { Category, SubCategory });
+
+                CompositeProducts = products.Select(details => new CompositeProduct
+                {
+                    ProductDetails = details
+                }).ToList();
+                return Ok(CompositeProducts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("v1/Categories")]
+        public async Task<ActionResult<IEnumerable<CategoryTransferObject>>> GetCategories()
+        {
+            try
+            {
+                var response = await _categoriesService.GetAll(new string[0]); ;         
+                return Ok(response);
+              
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /*
+        [HttpGet]
+        [Route("v1/Cart")]
+        public async Task<ActionResult<Cart>> GetCart(string cartId)
+        {
+            try
+            {
+                var response = await _cartService.Get(cartId);
+
+                return Ok(response);
+              
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        */
         [HttpPost]
-        [Route("/Images")]
-        public async Task<ActionResult<Image>> PostImage(IFormFile file, string altText)
+        [Route("v1/Images")]
+        public async Task<ActionResult<ImageTransferObject>> PostImage(IFormFile file, string altText)
         {
             try
             {
@@ -109,8 +172,8 @@ namespace Gateway.Controllers
         }
 
         [HttpPost]
-        [Route("/Products")]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        [Route("v1/Products")]
+        public async Task<ActionResult<ProductTransferObject>> PostProduct(ProductTransferObject product)
         {
             try
             {
@@ -124,14 +187,13 @@ namespace Gateway.Controllers
             }
         }
 
-
-        [HttpGet]
-        [Route("/Images")]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
+        [HttpPost]
+        [Route("v1/Category")]
+        public async Task<ActionResult<CategoryTransferObject>> CreateCategory(CategoryTransferObject category)
         {
             try
             {
-                var response = await _imageService.GetAll("");
+                var response = await _categoriesService.Post(category);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -140,9 +202,9 @@ namespace Gateway.Controllers
             }
         }
 
-
+        /*
         [HttpPost]
-        [Route("/Reviews")]
+        [Route("v1/Reviews")]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
             try
@@ -157,9 +219,8 @@ namespace Gateway.Controllers
             }
         }
 
-      
         [HttpPost]
-        [Route("/Checkout")]
+        [Route("v1/Checkout")]
         public async Task<ActionResult> PostCheckout(Checkout checkout)
         {
             try
@@ -181,79 +242,15 @@ namespace Gateway.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpGet]
-        [Route("/CategoryProducts/{Category}")]
-        public async Task<ActionResult<IEnumerable<CompositeProduct>>> GetCategoryProducts(string Category)
-        {
-            var CompositeProducts = new List<CompositeProduct>(); 
-
-            try
-            {
-                var products = await _productsService.GetAll(Category);
-
-                CompositeProducts = products.Select(details => new CompositeProduct
-                {
-                    ProductDetails = details
-                }).ToList();
-                return Ok(CompositeProducts);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
+             
         [HttpPost]
-        [Route("/Category")]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
-        {
-            try
-            {
-                var response = await _categoriesService.Post(category);
-                _categoryCache.Valid = false;
-                return Ok(response);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("/Categories")]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
-        {
-            try
-            {
-                if (!_cartCache.Valid)
-                {
-                    var response = await _categoriesService.GetAll(""); ;
-
-                    _categoryCache.Cache = response;
-                    _categoryCache.Valid = true;
-
-                    return Ok(response);
-                }
-                return Ok(_categoryCache.Cache);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        [Route("/Cart")]
+        [Route("v1/Cart")]
         public async Task<ActionResult> UpdateCart(Cart cart)
-        {
-            _cartCache.Valid = false;
+        {            
             try
             {
                 var response = await _cartService.Post(cart);
-                _cartCache.Cache = response;
-                _cartCache.Valid = true;
-
+                
                 return Ok(response);
             }
             catch (Exception ex)
@@ -262,30 +259,6 @@ namespace Gateway.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("/Cart")]
-        public async Task<ActionResult<Cart>> GetCart(string cartId)
-        {
-            try
-            {
-                if (!_cartCache.Valid)
-                {
-                    var response = await _cartService.Get(cartId);
-
-                    _cartCache.Cache = response;
-                    _cartCache.Valid = true;
-
-                    return Ok(response);
-                }
-                else
-                {
-                    return Ok(_cartCache.Cache);
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        */
     }
 }

@@ -4,13 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.DataModels.Components
+namespace Gateway.DataTransfer.ProductService
 {
-    public class Image
+    public class SubCategoryTransferObject
     {
+        [Key]
         public int Id { get; set; }
-        public string FilePath { get; set; }
-        public string FileName { get; set; }
-        public string AltText { get; set; }
+
+        [Required]
+        public string Name { get; set; }
     }
 }

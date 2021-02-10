@@ -1,4 +1,5 @@
 ﻿using Gateway.DataModels.Components;
+using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gateway.DataServices
 {
-    public class ProductService : IDataService<Product>
+    public class ProductService : IDataService<ProductTransferObject>
     {
         private string baseUri = "https://localhost:44376/";
         private IHttpService _httpService;
@@ -19,32 +20,37 @@ namespace Gateway.DataServices
 
         public async Task Delete(string slug)
         {
-            await _httpService.Delete($"{baseUri}api/v1/products/{slug}");
+            await _httpService.Delete($"{baseUri}api/productservice/v1/products/{slug}");
         }
 
-        public async Task<Product> Get(string slug)
+        public async Task<ProductTransferObject> Get(string slug)
         {
-            return await _httpService.Get<Product>($"{baseUri}api/v1/products/{slug}");
+            return await _httpService.Get<ProductTransferObject>($"{baseUri}api/productservice/v1/products/{slug}");
         }
 
-        public async Task<IEnumerable<Product>> GetAll(string category)
+        public async Task<IEnumerable<ProductTransferObject>> GetAll(string[] parameters)
         {
-            return await _httpService.Get<IEnumerable<Product>>($"{baseUri}api/v1/categoryproducts/{category}");
+            string uri = $"{baseUri}api/productservice/v1/categoryproducts/";
+            foreach (var param in parameters)
+            {
+                uri += $"{param}/";
+            }
+            return await _httpService.Get<IEnumerable<ProductTransferObject>>(uri);
         }
 
-        public async Task<Product> Post(Product entity)
+        public async Task<ProductTransferObject> Post(ProductTransferObject entity)
         {
-            return await _httpService.Post<Product>($"{baseUri}api/v1/products", entity);
+            return await _httpService.Post<ProductTransferObject>($"{baseUri}api/productservice/v1/products", entity);
         }
 
-        public Task<Product> PostFile(IFormFile file, string altText)
+        public Task<ProductTransferObject> PostFile(IFormFile file, string altText)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Product> Put(Product entity)
+        public async Task<ProductTransferObject> Put(ProductTransferObject entity)
         {
-            return await _httpService.Put<Product>($"{baseUri}api/v1/products", entity);
+            return await _httpService.Put<ProductTransferObject>($"{baseUri}api/v1/products", entity);
         }
     }
 }

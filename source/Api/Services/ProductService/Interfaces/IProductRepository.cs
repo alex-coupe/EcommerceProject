@@ -8,7 +8,7 @@ namespace ProductService.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAll(string category);
+        Task<IEnumerable<Product>> GetAll(string category, string subcategory);
 
         Task<Product> GetOne(string slug);
 
@@ -16,7 +16,7 @@ namespace ProductService.Interfaces
 
         void Update(Product product);
 
-        void Remove(Product product);
+        void Remove(int id);
 
         Task<int> SaveChanges();
     }

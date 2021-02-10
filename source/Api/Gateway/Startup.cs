@@ -1,7 +1,7 @@
-using Gateway.Caches;
 using Gateway.DataModels;
 using Gateway.DataModels.Components;
 using Gateway.DataServices;
+using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,10 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Gateway
 {
@@ -33,16 +29,14 @@ namespace Gateway
         {
             services.AddHttpClient();
             services.AddScoped<IHttpService, HttpService>();
-            services.AddScoped<IDataService<Category>, CategoryService>();
-            services.AddScoped<IDataService<Product>, ProductService>();
+            services.AddScoped<IDataService<CategoryTransferObject>, CategoryService>();
+            services.AddScoped<IDataService<ProductTransferObject>, ProductService>();
             services.AddScoped<IDataService<Cart>, CartService>();
             services.AddScoped<IDataService<Inventory>, InventoryService>();
             services.AddScoped<IDataService<RelatedProduct>, RelatedProductService>();
             services.AddScoped<IDataService<Review>, ReviewService>();
             services.AddScoped<IDataService<Checkout>, CheckoutService>();
-            services.AddScoped<IDataService<Image>, ImageService>();
-            services.AddScoped<IDataCache<Cart>, CartCache>();
-            services.AddSingleton<IDataCache<IEnumerable<Category>>, CategoryCache>();
+            services.AddScoped<IDataService<ImageTransferObject>, ImageService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

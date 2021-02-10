@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ProductService.Interfaces
 {
-    public interface IImageRepository
+    public interface ISubCategoryRepository
     {
-        Task<IEnumerable<Image>> GetAll();
+        Task<IEnumerable<SubCategory>> GetAll();
 
-        Task<Image> GetOne(int Id);
+        Task<SubCategory> GetOne(int id);
 
-        void Create(Image image);
+        void Create(SubCategory subCategory);
 
-        void Update(Image image);
+        void Update(SubCategory subCategory);
 
         void Remove(int id);
 

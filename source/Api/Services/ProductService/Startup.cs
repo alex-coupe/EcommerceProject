@@ -36,6 +36,7 @@ namespace ProductService
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

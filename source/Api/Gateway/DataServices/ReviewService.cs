@@ -28,9 +28,14 @@ namespace Gateway.DataServices
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Review>> GetAll(string parameter)
+        public async Task<IEnumerable<Review>> GetAll(string[] parameters)
         {
-            return await _httpService.Get<IEnumerable<Review>>($"{baseUri}api/v1/reviews/{parameter}");
+            var uri = $"{baseUri}api/v1/reviews/";
+            foreach (var param in parameters)
+            {
+                uri += $"{param}/";
+            }
+            return await _httpService.Get<IEnumerable<Review>>(uri);
         }
 
         public Task<Review> Post(Review entity)

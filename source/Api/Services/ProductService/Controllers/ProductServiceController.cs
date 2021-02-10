@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Gateway.DataTransfer.ProductService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Interfaces;
 using ProductService.Models;
@@ -17,6 +18,8 @@ namespace ProductService.Controllers
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IImageRepository _imageRepository;
+      
+      
         public ProductServiceController(IProductRepository productRepository, ICategoryRepository categoryRepository, IImageRepository imageRepository)
         {
             _productRepository = productRepository;
@@ -25,34 +28,36 @@ namespace ProductService.Controllers
         }
 
         [HttpGet]
-        [Route("v1/products/{subcategory}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string subcategory)
+        [Route("v1/categoryproducts/{category}/{subcategory}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string category, string subcategory)
         {
-            var products = await _productRepository.GetAll(subcategory);
+            var products = await _productRepository.GetAll(category, subcategory);
 
             return Ok(products);
         }
 
         [HttpGet]
-        [Route("v1/product/{slug}")]
-        public async Task<ActionResult<Product>> GetProduct(string slug)
+        [Route("v1/products/{slug}")]
+        public async Task<ActionResult<ProductTransferObject>> GetProduct(string slug)
         {
             var product = await _productRepository.GetOne(slug);
 
             if (product != null)
+            {
+             
                 return Ok(product);
-
+            }
             return NotFound();
         }
 
         [HttpGet]
         [Route("v1/product/price/{slug}")]
-        public async Task<ActionResult<decimal>> GetPrice(string slug)
+        public async Task<ActionResult> GetPrice(string slug)
         {
             var product = await _productRepository.GetOne(slug);
 
             if (product != null)
-                return Ok(product.UnitPrice);
+                return Ok(new { UnitPrice = product.UnitPrice });
 
             return NotFound();
         }
@@ -60,21 +65,23 @@ namespace ProductService.Controllers
 
         [HttpGet]
         [Route("v1/categories")]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryTransferObject>>> GetCategories()
         {
             var categories = await _categoryRepository.GetAll();
 
             return Ok(categories);
         }
 
-        [HttpGet]
-        [Route("v1/categories/{baseCategory}")]
-        public async Task<ActionResult<Category>> GetCategory(string baseCategory)
-        {
-            var category = await _categoryRepository.GetOne(baseCategory);
 
-            if (category != null)
-                return Ok(category);
+        //Get subcategories by main category
+        [HttpGet]
+        [Route("v1/categories/{Category}")]
+        public async Task<ActionResult<CategoryTransferObject>> GetCategory(string Category)
+        {
+            var categoryTransferObject = await _categoryRepository.GetOne(Category);
+
+            if (categoryTransferObject != null)
+                return Ok(categoryTransferObject);
 
             return NotFound();
         }
@@ -113,13 +120,13 @@ namespace ProductService.Controllers
 
         [HttpPost]
         [Route("v1/categories")]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
+        public async Task<ActionResult<CategoryTransferObject>> CreateCategory(CategoryTransferObject category)
         {
             _categoryRepository.Create(category);
 
             await _categoryRepository.SaveChanges();
 
-            return CreatedAtAction("CreateCategory", new { id = category.Id }, category);
+            return CreatedAtAction("CreateCategory", category);
         }
 
         [HttpPost]
@@ -127,22 +134,22 @@ namespace ProductService.Controllers
         public async Task<ActionResult<Image>> CreateImage(IFormFile file)
         {
             string altText = Request.Form["altText"];
-            string[] permittedExtensions = { ".gif", ".png", ".jpeg", ".jpg" };
+            string[] permittedExtensions = { ".gif", ".png", ".jpeg", ".jpg", ".webp" };
             var _fileSizeLimit = 5000000;
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext) || file.Length > _fileSizeLimit)
                 return null;
             var fileName = file.FileName;
-            var filePath = "C:\\Users\\Alexander\\Documents\\TestDocs";
+            var filePath = "C:\\Users\\Alexander\\Documents\\ShopImages";
             var fullPath = Path.Combine(filePath,fileName);
-
-            using (var stream = System.IO.File.Create(fullPath))
-            {
-                await file.CopyToAsync(stream);
-            }
             try
             {
+                using (var stream = System.IO.File.Create(fullPath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+           
                 var image = new Image
                 {
                     AltText = altText,
@@ -163,7 +170,7 @@ namespace ProductService.Controllers
 
 
         [HttpPut]
-        [Route("v1/products/{product}")]
+        [Route("v1/products")]
         public async Task<ActionResult<Product>> UpdateProduct(Product product)
         {
             _productRepository.Update(product);
@@ -174,7 +181,7 @@ namespace ProductService.Controllers
         }
 
         [HttpPut]
-        [Route("v1/categories/{category}")]
+        [Route("v1/categories")]
         public async Task<ActionResult<Category>> UpdateCategory(Category category)
         {
             _categoryRepository.Update(category);
@@ -185,7 +192,7 @@ namespace ProductService.Controllers
         }
 
         [HttpPut]
-        [Route("v1/images/{image}")]
+        [Route("v1/images")]
         public async Task<ActionResult<Image>> UpdateImage(Image image)
         {
             _imageRepository.Update(image);
@@ -196,10 +203,10 @@ namespace ProductService.Controllers
         }
 
         [HttpDelete]
-        [Route("v1/products/{product}")]
-        public async Task<ActionResult> RemoveProduct(Product product)
+        [Route("v1/products")]
+        public async Task<ActionResult> RemoveProduct(int id)
         {
-             _productRepository.Remove(product);
+             _productRepository.Remove(id);
 
             await _productRepository.SaveChanges();
 
@@ -207,10 +214,10 @@ namespace ProductService.Controllers
         }
 
         [HttpDelete]
-        [Route("v1/categories/{category}")]
-        public async Task<ActionResult> RemoveCategory(Category category)
+        [Route("v1/categories")]
+        public async Task<ActionResult> RemoveCategory(int id)
         {
-            _categoryRepository.Remove(category);
+            _categoryRepository.Remove(id);
 
             await _productRepository.SaveChanges();
 
@@ -218,10 +225,10 @@ namespace ProductService.Controllers
         }
 
         [HttpDelete]
-        [Route("v1/images/{image}")]
-        public async Task<ActionResult> RemoveImage(Image image)
+        [Route("v1/images")]
+        public async Task<ActionResult> RemoveImage(int id)
         {
-            _imageRepository.Remove(image);
+            _imageRepository.Remove(id);
 
             await _productRepository.SaveChanges();
 

@@ -22,18 +22,17 @@ namespace ProductService.Repositories
             _context.Products.Add(product);
         }
 
-        public void Remove(Product product)
+        public void Remove(int id)
         {
+            var product = _context.Products.Find(id);
             _context.Products.Remove(product);
         }
 
-        public async Task<IEnumerable<Product>> GetAll(string category)
+        public async Task<IEnumerable<Product>> GetAll(string category, string subcategory)
         {
             return await _context.Products.AsNoTracking()
-                .Where(x => x.Category.SubCategories.Any(sc => sc.Name == category))
-                .Include(x => x.ProductImage)
-                .Include(x => x.Category)
-                .ThenInclude(x => x.SubCategories)
+                .Where(prod => prod.Categories.Where(cat => cat.Name == category).Any() 
+                && prod.SubCategories.Where(sub => sub.Name == subcategory).Any())
                 .ToListAsync();
         }
 
@@ -42,8 +41,6 @@ namespace ProductService.Repositories
             return await _context.Products.AsNoTracking()
                 .Where(x => x.Slug == slug)
                 .Include(x => x.ProductImage)
-                .Include(x => x.Category)
-                .ThenInclude(x => x.SubCategories)
                 .FirstOrDefaultAsync();
         }
 

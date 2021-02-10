@@ -1,4 +1,4 @@
-﻿using Gateway.DataModels.Components;
+﻿using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gateway.DataServices
 {
-    public class CategoryService : IDataService<Category>
+    public class CategoryService : IDataService<CategoryTransferObject>
     {
         private IHttpService _httpService;
         private string baseUri = "https://localhost:44376/";
@@ -22,29 +22,29 @@ namespace Gateway.DataServices
             await _httpService.Delete($"{baseUri}api/productservice/v1/categories/{slug}");
         }
 
-        public async Task<Category> Get(string slug)
+        public async Task<CategoryTransferObject> Get(string slug)
         {
-            return await _httpService.Get<Category>($"{baseUri}api/productservice/v1/categories/{slug}");
+            return await _httpService.Get<CategoryTransferObject>($"{baseUri}api/productservice/v1/categories/{slug}");
         }
 
-        public async Task<IEnumerable<Category>> GetAll(string _)
+        public async Task<IEnumerable<CategoryTransferObject>> GetAll(string[] _)
         {
-            return await _httpService.Get<IEnumerable<Category>>($"{baseUri}api/productservice/v1/categories/");
+            return await _httpService.Get<IEnumerable<CategoryTransferObject>>($"{baseUri}api/productservice/v1/categories/");
         }
 
-        public async Task<Category> Post(Category entity)
+        public async Task<CategoryTransferObject> Post(CategoryTransferObject entity)
         {
-            return await _httpService.Post<Category>($"{baseUri}api/productservice/v1/categories/", entity);
+            return await _httpService.Post<CategoryTransferObject>($"{baseUri}api/productservice/v1/categories/", entity);
         }
 
-        public Task<Category> PostFile(IFormFile file, string altText)
+        public Task<CategoryTransferObject> PostFile(IFormFile file, string altText)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Category> Put(Category entity)
+        public async Task<CategoryTransferObject> Put(CategoryTransferObject entity)
         {
-            return await _httpService.Put<Category>($"{baseUri}api/v1/categories", entity);
+            return await _httpService.Put<CategoryTransferObject>($"{baseUri}api/v1/categories", entity);
         }
     }
 }

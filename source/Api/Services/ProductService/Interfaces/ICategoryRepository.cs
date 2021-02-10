@@ -1,4 +1,5 @@
-﻿using ProductService.Models;
+﻿using Gateway.DataTransfer.ProductService;
+using ProductService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,15 @@ namespace ProductService.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAll();
+        Task<IEnumerable<CategoryTransferObject>> GetAll();
 
-        Task<Category> GetOne(string category);
+        Task<CategoryTransferObject> GetOne(string category);
 
-        void Create(Category category);
+        void Create(CategoryTransferObject category);
 
         void Update(Category category);
 
-        void Remove(Category category);
+        void Remove(int id);
 
         Task<int> SaveChanges();
     }

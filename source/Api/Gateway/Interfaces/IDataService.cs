@@ -8,7 +8,7 @@ namespace Gateway.Interfaces
 {
     public interface IDataService<T>
     {
-        Task<IEnumerable<T>> GetAll(string parameter);
+        Task<IEnumerable<T>> GetAll(string[] parameters);
         Task<T> Get(string slug);
 
         Task<T> Post(T entity);

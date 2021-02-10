@@ -33,8 +33,9 @@ namespace ProductService.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public void Remove(Image image)
+        public void Remove(int id)
         {
+            var image = _context.Images.Find(id);
             _context.Images.Remove(image);
         }
 

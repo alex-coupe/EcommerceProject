@@ -27,7 +27,7 @@ namespace Gateway.DataServices
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Checkout>> GetAll(string parameter)
+        public Task<IEnumerable<Checkout>> GetAll(string[] parameters)
         {
             throw new NotImplementedException();
         }

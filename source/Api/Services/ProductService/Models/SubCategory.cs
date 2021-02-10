@@ -13,5 +13,9 @@ namespace ProductService.Models
 
         [Required]
         public string Name { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Gateway.DataServices
             return await _httpService.Get<Inventory>($"{baseUri}api/v1/inventory/{slug}");
         }
 
-        public Task<IEnumerable<Inventory>> GetAll(string parameter)
+        public Task<IEnumerable<Inventory>> GetAll(string[] parameters)
         {
             throw new NotImplementedException();
         }

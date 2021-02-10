@@ -124,34 +124,41 @@ namespace ProductService.Controllers
 
         [HttpPost]
         [Route("v1/images")]
-        public async Task<ActionResult<Image>> CreateImage(IFormFile file, string altText)
+        public async Task<ActionResult<Image>> CreateImage(IFormFile file)
         {
+            string altText = Request.Form["altText"];
             string[] permittedExtensions = { ".gif", ".png", ".jpeg", ".jpg" };
-            var _fileSizeLimit = 5000;
+            var _fileSizeLimit = 5000000;
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext) || file.Length > _fileSizeLimit)
                 return null;
-            var fileName = Path.GetRandomFileName();
-            var filePath = "C:";
+            var fileName = file.FileName;
+            var filePath = "C:\\Users\\Alexander\\Documents\\TestDocs";
             var fullPath = Path.Combine(filePath,fileName);
 
             using (var stream = System.IO.File.Create(fullPath))
             {
                 await file.CopyToAsync(stream);
             }
-
-            var image = new Image
+            try
             {
-                AltText = altText,
-                FileName = fileName,
-                FilePath = filePath
-            };
-            _imageRepository.Create(image);
+                var image = new Image
+                {
+                    AltText = altText,
+                    FileName = fileName,
+                    FilePath = filePath
+                };
+                _imageRepository.Create(image);
 
-            await _imageRepository.SaveChanges();
+                await _imageRepository.SaveChanges();
 
-            return CreatedAtAction("CreateImage", new {id = image.Id }, image);
+                return CreatedAtAction("CreateImage", new { id = image.Id }, image);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
 

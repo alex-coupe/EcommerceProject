@@ -10,7 +10,7 @@ namespace Gateway.DataServices
 {
     public class ProductService : IDataService<Product>
     {
-        private string baseUri = "http://products_service:5001/";
+        private string baseUri = "https://localhost:44376/";
         private IHttpService _httpService;
         public ProductService(IHttpService httpService)
         {

@@ -37,8 +37,10 @@ namespace ProductService.Migrations
 
             modelBuilder.Entity("ProductService.Models.Image", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AltText")
                         .IsRequired()
@@ -75,8 +77,8 @@ namespace ProductService.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ProductImageId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ProductImageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -105,6 +107,7 @@ namespace ProductService.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

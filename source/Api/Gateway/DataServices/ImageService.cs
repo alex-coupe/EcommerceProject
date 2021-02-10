@@ -10,7 +10,7 @@ namespace Gateway.DataServices
 {
     public class ImageService : IDataService<Image>
     {
-        private string baseUri = "http://image_service:5008/";
+        private string baseUri = "https://localhost:44376/";
         private IHttpService _httpService;
 
         public ImageService(IHttpService httpService)
@@ -29,7 +29,7 @@ namespace Gateway.DataServices
 
         public async Task<IEnumerable<Image>> GetAll(string parameter)
         {
-            return await _httpService.Get<IEnumerable<Image>>($"{baseUri}api/v1/images/{parameter}");
+            return await _httpService.Get<IEnumerable<Image>>($"{baseUri}api/productservice/v1/images/{parameter}");
         }
 
         public async Task<Image> Post(Image entity)
@@ -37,9 +37,9 @@ namespace Gateway.DataServices
             return await _httpService.Post<Image>($"{baseUri}api/v1/images", entity);
         }
 
-        public Task<Image> PostFile(IFormFile file, string altText)
+        public async Task<Image> PostFile(IFormFile file, string altText)
         {
-            throw new NotImplementedException();
+            return await _httpService.PostFile<Image>($"{baseUri}api/productservice/v1/images/", file, altText);
         }
 
         public Task<Image> Put(Image entity)

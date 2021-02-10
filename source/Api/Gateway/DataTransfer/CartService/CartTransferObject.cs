@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.DataModels
+namespace Gateway.DataTransfer.CartService
 {
-    public class Cart
+    public class CartTransferObject
     {
         public string Id { get; set; }
 

@@ -1,0 +1,24 @@
+﻿using CartService.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CartService.Services
+{
+    public class ProductServiceClient : IProductServiceClient
+    {
+        private IHttpService _httpService;
+        private string baseUri = "https://localhost:44376/";
+
+        public ProductServiceClient(IHttpService httpService)
+        {
+            _httpService = httpService;
+        }
+
+        public async Task<decimal> GetItemBasePrice(int Sku)
+        {
+            return await _httpService.Get<decimal>($"{baseUri}api/v1/products/price/{Sku}");
+        }
+    }
+}

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.DataModels.Components
+namespace Gateway.DataTransfer.CartService
 {
     public class CartItem
     {
         public int Id { get; set; }
         public string CartId { get; set; }
-        public string Sku { get; set; }
+        public int Sku { get; set; }
 
         public string Name { get; set; }
 

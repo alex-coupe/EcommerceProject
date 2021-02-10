@@ -1,6 +1,7 @@
 using Gateway.DataModels;
 using Gateway.DataModels.Components;
 using Gateway.DataServices;
+using Gateway.DataTransfer.CartService;
 using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,7 @@ namespace Gateway
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IDataService<CategoryTransferObject>, CategoryService>();
             services.AddScoped<IDataService<ProductTransferObject>, ProductService>();
-            services.AddScoped<IDataService<Cart>, CartService>();
+            services.AddScoped<IDataService<CartTransferObject>, CartService>();
             services.AddScoped<IDataService<Inventory>, InventoryService>();
             services.AddScoped<IDataService<RelatedProduct>, RelatedProductService>();
             services.AddScoped<IDataService<Review>, ReviewService>();

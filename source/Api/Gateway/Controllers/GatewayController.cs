@@ -85,21 +85,7 @@ namespace Gateway.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("v1/Images")]
-        public async Task<ActionResult<IEnumerable<ImageTransferObject>>> GetImages()
-        {
-            try
-            {
-                var response = await _imageService.GetAll(new string[0]);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
+       
         [HttpGet]
         [Route("v1/CategoryProducts/{Category}/{SubCategory}")]
         public async Task<ActionResult<IEnumerable<CompositeProduct>>> GetCategoryProducts(string Category, string SubCategory)
@@ -155,29 +141,14 @@ namespace Gateway.Controllers
             }
         }
         */
-        [HttpPost]
-        [Route("v1/Images")]
-        public async Task<ActionResult<ImageTransferObject>> PostImage(IFormFile file, string altText)
-        {
-            try
-            {
-                var response = await _imageService.PostFile(file, altText);
-
-                return Ok(response);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
         [HttpPost]
         [Route("v1/Products")]
-        public async Task<ActionResult<ProductTransferObject>> PostProduct(ProductTransferObject product)
+        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, IFormCollection form)
         {
             try
             {
-                var response = await _productsService.Post(product);
+                var response = await _productsService.PostForm(file, form);
 
                 return Ok(response);
             }

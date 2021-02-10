@@ -34,9 +34,10 @@ namespace ProductService.Models
 
         [JsonIgnore]
         public Image ProductImage { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Category> Categories { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<SubCategory> SubCategories { get; set; }
+       
+
+        public string Category { get; set; }
+     
+        public string SubCategory { get; set; }
     }
 }

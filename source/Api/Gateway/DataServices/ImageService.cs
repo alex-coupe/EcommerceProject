@@ -44,9 +44,9 @@ namespace Gateway.DataServices
             return await _httpService.Post<ImageTransferObject>($"{baseUri}api/v1/images", entity);
         }
 
-        public async Task<ImageTransferObject> PostFile(IFormFile file, string altText)
+        public Task<ImageTransferObject> PostForm(IFormFile file, IFormCollection form)
         {
-            return await _httpService.PostFile<ImageTransferObject>($"{baseUri}api/productservice/v1/images/", file, altText);
+            throw new NotImplementedException();
         }
 
         public Task<ImageTransferObject> Put(ImageTransferObject entity)

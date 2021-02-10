@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ProductService.Controllers
@@ -29,7 +30,7 @@ namespace ProductService.Controllers
 
         [HttpGet]
         [Route("v1/categoryproducts/{category}/{subcategory}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string category, string subcategory)
+        public async Task<ActionResult<IEnumerable<ProductTransferObject>>> GetProducts(string category, string subcategory)
         {
             var products = await _productRepository.GetAll(category, subcategory);
 
@@ -86,38 +87,6 @@ namespace ProductService.Controllers
             return NotFound();
         }
 
-        [HttpGet]
-        [Route("v1/images/")]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImage()
-        {
-            var images = await _imageRepository.GetAll();
-
-            return Ok(images);
-        }
-
-        [HttpGet]
-        [Route("v1/images/{id}")]
-        public async Task<ActionResult<Image>> GetImage(int id)
-        {
-            var image = await _imageRepository.GetOne(id);
-
-            if (image != null)
-                return Ok(image);
-
-            return NotFound();
-        }
-
-        [HttpPost]
-        [Route("v1/products")]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
-        {
-            _productRepository.Create(product);
-
-            await _productRepository.SaveChanges();
-
-            return CreatedAtAction("CreateProduct", product);
-        }
-
         [HttpPost]
         [Route("v1/categories")]
         public async Task<ActionResult<CategoryTransferObject>> CreateCategory(CategoryTransferObject category)
@@ -130,10 +99,11 @@ namespace ProductService.Controllers
         }
 
         [HttpPost]
-        [Route("v1/images")]
-        public async Task<ActionResult<Image>> CreateImage(IFormFile file)
+        [Route("v1/products")]
+        public async Task<ActionResult<ProductTransferObject>> CreateProduct(IFormFile file, IFormCollection form)
         {
-            string altText = Request.Form["altText"];
+            var test = (form["form"]);
+            var productInput = JsonSerializer.Deserialize<ProductTransferObject>(form["form"]);
             string[] permittedExtensions = { ".gif", ".png", ".jpeg", ".jpg", ".webp" };
             var _fileSizeLimit = 5000000;
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -152,7 +122,7 @@ namespace ProductService.Controllers
            
                 var image = new Image
                 {
-                    AltText = altText,
+                    AltText = productInput.AltText,
                     FileName = fileName,
                     FilePath = filePath
                 };
@@ -160,7 +130,25 @@ namespace ProductService.Controllers
 
                 await _imageRepository.SaveChanges();
 
-                return CreatedAtAction("CreateImage", new { id = image.Id }, image);
+                var product = new Product
+                {
+                    Name = productInput.Name,
+                    Sku = productInput.Sku,
+                    Description = productInput.Description,
+                    ProductImageId = image.Id,
+                    Slug = productInput.Slug,
+                    UnitPrice = productInput.UnitPrice,
+                    Category = productInput.Category,
+                    SubCategory = productInput.SubCategory
+                };
+
+                productInput.ImagePath = fullPath;
+
+                _productRepository.Create(product);
+                await _productRepository.SaveChanges();
+                
+
+                return CreatedAtAction("CreateProduct", productInput);
             }
             catch(Exception e)
             {
@@ -191,16 +179,6 @@ namespace ProductService.Controllers
             return Ok();
         }
 
-        [HttpPut]
-        [Route("v1/images")]
-        public async Task<ActionResult<Image>> UpdateImage(Image image)
-        {
-            _imageRepository.Update(image);
-
-            await _imageRepository.SaveChanges();
-
-            return Ok(image);
-        }
 
         [HttpDelete]
         [Route("v1/products")]

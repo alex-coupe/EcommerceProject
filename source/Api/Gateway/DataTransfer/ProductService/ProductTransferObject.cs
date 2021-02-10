@@ -17,9 +17,13 @@ namespace Gateway.DataTransfer.ProductService
         public decimal UnitPrice { get; set; }
 
         public string Slug { get; set; }
+        public string AltText { get; set; }
 
-        public int ProductImagIde { get; set; }
-        public IEnumerable<int> CategoryIds { get; set; }
-        public IEnumerable<int> SubcategoryIds { get; set; }
+        public string ImagePath { get; set; }
+
+        public string Category { get; set; }
+
+        public string SubCategory { get; set; }
+
     }
 }

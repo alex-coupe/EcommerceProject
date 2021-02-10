@@ -43,9 +43,9 @@ namespace Gateway.DataServices
             return await _httpService.Post<ProductTransferObject>($"{baseUri}api/productservice/v1/products", entity);
         }
 
-        public Task<ProductTransferObject> PostFile(IFormFile file, string altText)
+        public async Task<ProductTransferObject> PostForm(IFormFile file, IFormCollection form)
         {
-            throw new NotImplementedException();
+            return await _httpService.PostForm<ProductTransferObject>($"{baseUri}api/productservice/v1/products/", file, form);
         }
 
         public async Task<ProductTransferObject> Put(ProductTransferObject entity)

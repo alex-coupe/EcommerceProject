@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Gateway.DataTransfer.ProductService;
+using Microsoft.EntityFrameworkCore;
 using ProductService.Interfaces;
 using ProductService.Models;
 using System;
@@ -28,19 +29,43 @@ namespace ProductService.Repositories
             _context.Products.Remove(product);
         }
 
-        public async Task<IEnumerable<Product>> GetAll(string category, string subcategory)
+        public async Task<IEnumerable<ProductTransferObject>> GetAll(string category, string subcategory)
         {
             return await _context.Products.AsNoTracking()
-                .Where(prod => prod.Categories.Where(cat => cat.Name == category).Any() 
-                && prod.SubCategories.Where(sub => sub.Name == subcategory).Any())
+                .Where(prod => prod.Category == category && prod.SubCategory == subcategory)
+                .Include(i => i.ProductImage)
+                .Select(x => new ProductTransferObject
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    AltText = x.ProductImage.AltText,
+                    ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
+                    Sku = x.Sku,
+                    Slug = x.Slug,
+                    UnitPrice = x.UnitPrice,
+                    Category = x.Category,
+                    SubCategory = x.SubCategory
+                })
                 .ToListAsync();
         }
 
-        public async Task<Product> GetOne(string slug)
+        public async Task<ProductTransferObject> GetOne(string slug)
         {
             return await _context.Products.AsNoTracking()
                 .Where(x => x.Slug == slug)
                 .Include(x => x.ProductImage)
+                .Select(x => new ProductTransferObject
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    AltText = x.ProductImage.AltText,
+                    ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
+                    Sku = x.Sku,
+                    Slug = x.Slug,
+                    UnitPrice = x.UnitPrice,
+                    Category = x.Category,
+                    SubCategory = x.SubCategory
+                })
                 .FirstOrDefaultAsync();
         }
 

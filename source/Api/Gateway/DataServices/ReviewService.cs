@@ -43,7 +43,7 @@ namespace Gateway.DataServices
             throw new NotImplementedException();
         }
 
-        public Task<Review> PostFile(IFormFile file, string altText)
+        public Task<Review> PostForm(IFormFile file, IFormCollection form)
         {
             throw new NotImplementedException();
         }

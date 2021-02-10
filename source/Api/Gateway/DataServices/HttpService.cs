@@ -41,7 +41,7 @@ namespace Gateway.DataServices
             return await sendRequest<T>(request);
         }
 
-        public async Task<T> PostFile<T>(string uri, IFormFile file, string text)
+        public async Task<T> PostForm<T>(string uri, IFormFile file, IFormCollection form)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             if (file != null && file.Length > 0)
@@ -50,16 +50,22 @@ namespace Gateway.DataServices
                 using (var br = new BinaryReader(file.OpenReadStream()))
                     data = br.ReadBytes((int)file.OpenReadStream().Length);
 
-                StringContent alt = new StringContent(text);
-
+                
                 ByteArrayContent bytes = new ByteArrayContent(data);
 
+                var dict = new Dictionary<string, string>();
+
+                foreach (var key in form.Keys)
+                {
+                    dict.Add(key, form[key]);
+                }
+
+                HttpContent DictionaryItems = new FormUrlEncodedContent(dict);
 
                 MultipartFormDataContent multiContent = new MultipartFormDataContent();
 
-
                 multiContent.Add(bytes, "file", file.FileName);
-                multiContent.Add(alt, "altText");
+                multiContent.Add(DictionaryItems, "form");
 
                 request.Content = multiContent;
 

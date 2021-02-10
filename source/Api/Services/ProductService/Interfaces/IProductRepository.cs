@@ -1,4 +1,5 @@
-﻿using ProductService.Models;
+﻿using Gateway.DataTransfer.ProductService;
+using ProductService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace ProductService.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAll(string category, string subcategory);
+        Task<IEnumerable<ProductTransferObject>> GetAll(string category, string subcategory);
 
-        Task<Product> GetOne(string slug);
+        Task<ProductTransferObject> GetOne(string slug);
 
         void Create(Product product);
 

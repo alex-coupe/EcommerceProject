@@ -2,6 +2,8 @@ using CartService.Interfaces;
 using CartService.Models;
 using CartService.Repositories;
 using CartService.Services;
+using Gateway.DataServices;
+using Gateway.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

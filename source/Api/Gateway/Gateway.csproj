@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataTransfer\InventoryService\" />
-    <Folder Include="DataTransfer\CheckoutService\" />
-    <Folder Include="DataTransfer\RelatedProductService\" />
-    <Folder Include="DataTransfer\ReviewService\" />
     <Folder Include="PageModels\" />
   </ItemGroup>
 

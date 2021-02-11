@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Gateway.Interfaces;
 using Gateway.DataTransfer.ProductService;
 using Gateway.DataTransfer.CartService;
+using Gateway.DataTransfer.InventoryService;
 
 namespace Gateway.Controllers
 {
@@ -23,12 +24,12 @@ namespace Gateway.Controllers
         private IDataService<Checkout> _checkoutService;
         private IDataService<Review> _reviewService;
         private IDataService<RelatedProduct> _relatedProductsService;
-        private IDataService<Inventory> _inventoryService;
+        private IDataService<InventoryTransferObject> _inventoryService;
      
 
         public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<ProductTransferObject> productsService, IDataService<CartTransferObject> cartService,
             IDataService<Checkout> checkoutService, IDataService<Review> reviewService, IDataService<RelatedProduct> relatedProductsService,
-            IDataService<Inventory> inventoryService)
+            IDataService<InventoryTransferObject> inventoryService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;

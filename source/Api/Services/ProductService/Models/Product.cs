@@ -11,12 +11,15 @@ namespace ProductService.Models
     public class Product
     { 
         [Key]
-        public int Sku { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MinLength(10)]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        [Required]
+        public IEnumerable<ProductVariant> Sizes { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -34,10 +37,10 @@ namespace ProductService.Models
 
         [JsonIgnore]
         public Image ProductImage { get; set; }
-       
 
+        [Required]
         public string Category { get; set; }
-     
+        [Required]
         public string SubCategory { get; set; }
     }
 }

@@ -132,13 +132,17 @@ namespace ProductService.Controllers
                 var product = new Product
                 {
                     Name = newProduct.Name,
-                    Sku = newProduct.Sku,
                     Description = newProduct.Description,
                     ProductImageId = image.Id,
                     Slug = newProduct.Slug,
                     UnitPrice = newProduct.UnitPrice,
-                    Category = newProduct.Category,
-                    SubCategory = newProduct.SubCategory
+                    Category =  newProduct.Categories.MainCategory,
+                    SubCategory = newProduct.Categories.SubCategories.FirstOrDefault(),
+                    Sizes = newProduct.ProductVariants.Select (x => new ProductVariant
+                    {
+                        Size = x.Size,
+                        Sku = x.Sku,
+                    })                    
                 };
 
                 newProduct.ImagePath = fullPath;

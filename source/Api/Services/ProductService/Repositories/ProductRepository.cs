@@ -34,17 +34,25 @@ namespace ProductService.Repositories
             return await _context.Products.AsNoTracking()
                 .Where(prod => prod.Category == category && prod.SubCategory == subcategory)
                 .Include(i => i.ProductImage)
+                .Include(pv => pv.Sizes)
                 .Select(x => new ProductTransferObject
                 {
                     Name = x.Name,
                     Description = x.Description,
                     AltText = x.ProductImage.AltText,
                     ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
-                    Sku = x.Sku,
+                    ProductVariants = x.Sizes.Select(x => new ProductVariantTransferObject
+                    {
+                        Size = x.Size,
+                        Sku = x.Sku
+                    }),
                     Slug = x.Slug,
                     UnitPrice = x.UnitPrice,
-                    Category = x.Category,
-                    SubCategory = x.SubCategory
+                    Categories = new CategoryTransferObject
+                    {
+                        MainCategory = x.Category,
+                        SubCategories = new List<string> { x.SubCategory }
+                    }
                 })
                 .ToListAsync();
         }
@@ -60,11 +68,19 @@ namespace ProductService.Repositories
                     Description = x.Description,
                     AltText = x.ProductImage.AltText,
                     ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
-                    Sku = x.Sku,
+                    ProductVariants = x.Sizes.Select(x => new ProductVariantTransferObject
+                    {
+                        Size = x.Size,
+                        Sku = x.Sku
+                    }),
                     Slug = x.Slug,
                     UnitPrice = x.UnitPrice,
-                    Category = x.Category,
-                    SubCategory = x.SubCategory
+                    Categories = new CategoryTransferObject
+                    {
+                        MainCategory = x.Category,
+                        SubCategories = new List<string> { x.SubCategory }
+                    }
+                    
                 })
                 .FirstOrDefaultAsync();
         }

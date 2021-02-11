@@ -10,7 +10,6 @@ namespace Gateway.DataTransfer.ProductService
     {
         public string Name { get; set; }
 
-        public int Sku { get; set; }
 
         public string Description { get; set; }
 
@@ -21,9 +20,9 @@ namespace Gateway.DataTransfer.ProductService
 
         public string ImagePath { get; set; }
 
-        public string Category { get; set; }
+        public CategoryTransferObject Categories { get; set; }
 
-        public string SubCategory { get; set; }
+        public IEnumerable<ProductVariantTransferObject> ProductVariants { get; set; }
 
     }
 }

@@ -19,12 +19,12 @@ namespace Gateway.Controllers
     public class GatewayController : ControllerBase
     {
         private IDataService<CategoryTransferObject> _categoriesService;
-        private IDataService<CompositeProduct> _productsService;
-        private IDataService<CartTransferObject> _cartService;
+        private IProductService _productsService;
+        private ICartService _cartService;
         private IDataService<Checkout> _checkoutService;
             
 
-        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<CompositeProduct> productsService, IDataService<CartTransferObject> cartService,
+        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IProductService productsService, ICartService cartService,
             IDataService<Checkout> checkoutService)
         {
             _categoriesService = categoriesService;
@@ -105,7 +105,7 @@ namespace Gateway.Controllers
 
         [HttpPost]
         [Route("v1/Products")]
-        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, [FromForm] CompositeProduct newProduct)
+        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, [FromForm] ProductTransferObject newProduct)
         {
             try
             {

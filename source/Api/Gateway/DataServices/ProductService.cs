@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gateway.DataServices
 {
-    public class ProductService : IDataService<CompositeProduct>
+    public class ProductService : IProductService
     {
         private string baseUri = "https://localhost:44376/";
         private IHttpService _httpService;
@@ -28,29 +28,29 @@ namespace Gateway.DataServices
             return await _httpService.Get<CompositeProduct>($"{baseUri}api/productservice/v1/products/{slug}");
         }
 
-        public async Task<IEnumerable<CompositeProduct>> GetAll(string[] parameters)
+        public async Task<IEnumerable<ProductTransferObject>> GetAll(string[] parameters)
         {
             string uri = $"{baseUri}api/productservice/v1/categoryproducts/";
             foreach (var param in parameters)
             {
                 uri += $"{param}/";
             }
-            return await _httpService.Get<IEnumerable<CompositeProduct>>(uri);
+            return await _httpService.Get<IEnumerable<ProductTransferObject>>(uri);
         }
 
-        public async Task<CompositeProduct> Post(CompositeProduct entity)
+        public async Task<ProductTransferObject> Post(CompositeProduct entity)
         {
-            return await _httpService.Post<CompositeProduct>($"{baseUri}api/productservice/v1/products", entity);
+            return await _httpService.Post<ProductTransferObject>($"{baseUri}api/productservice/v1/products", entity);
         }
 
-        public async Task<CompositeProduct> PostForm(IFormFile file, CompositeProduct product)
+        public async Task<ProductTransferObject> PostForm(IFormFile file, ProductTransferObject product)
         {
             return await _httpService.PostForm($"{baseUri}api/productservice/v1/products/", file, product);
         }
 
-        public async Task<CompositeProduct> Put(CompositeProduct entity)
+        public async Task<ProductTransferObject> Put(ProductTransferObject entity)
         {
-            return await _httpService.Put<CompositeProduct>($"{baseUri}api/v1/products", entity);
+            return await _httpService.Put<ProductTransferObject>($"{baseUri}api/v1/products", entity);
         }
     }
 }

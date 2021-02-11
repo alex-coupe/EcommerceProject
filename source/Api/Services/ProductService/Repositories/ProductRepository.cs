@@ -34,7 +34,7 @@ namespace ProductService.Repositories
             return await _context.Products.AsNoTracking()
                 .Where(prod => prod.Category == category && prod.SubCategory == subcategory)
                 .Include(i => i.ProductImage)
-                .Include(pv => pv.Sizes)
+               
                 .Select(x => new ProductTransferObject
                 {
                     Id = x.Id,
@@ -42,11 +42,6 @@ namespace ProductService.Repositories
                     Description = x.Description,
                     AltText = x.ProductImage.AltText,
                     ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
-                    ProductVariants = x.Sizes.Select(x => new ProductVariantTransferObject
-                    {
-                        Size = x.Size,
-                        Sku = x.Sku
-                    }),
                     Slug = x.Slug,
                     UnitPrice = x.UnitPrice,
                     Categories = new CategoryTransferObject

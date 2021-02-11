@@ -32,8 +32,8 @@ namespace Gateway
             services.AddHttpClient();
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IDataService<CategoryTransferObject>, CategoryService>();
-            services.AddScoped<IDataService<CompositeProduct>, ProductService>();
-            services.AddScoped<IDataService<CartTransferObject>, CartService>();          
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICartService, CartService>();          
             services.AddScoped<IDataService<Checkout>, CheckoutService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>

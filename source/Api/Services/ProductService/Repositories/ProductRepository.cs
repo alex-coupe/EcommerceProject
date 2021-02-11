@@ -37,6 +37,7 @@ namespace ProductService.Repositories
                 .Include(pv => pv.Sizes)
                 .Select(x => new ProductTransferObject
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     AltText = x.ProductImage.AltText,
@@ -64,6 +65,7 @@ namespace ProductService.Repositories
                 .Include(x => x.ProductImage)
                 .Select(x => new ProductTransferObject
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     AltText = x.ProductImage.AltText,
@@ -93,6 +95,25 @@ namespace ProductService.Repositories
         public void Update(Product product)
         {
             _context.Update(product);
+        }
+
+        public async Task<ProductTransferObject> GetProductById(int productId)
+        {
+            return await _context.Products.AsNoTracking()
+               .Where(prod => prod.Id == productId)
+               .Include(i => i.ProductImage)
+               .Select(x => new ProductTransferObject
+               {
+                   Id = x.Id,
+                   Name = x.Name,
+                   Description = x.Description,
+                   AltText = x.ProductImage.AltText,
+                   ImagePath = $"{x.ProductImage.FilePath}{x.ProductImage.FileName}",
+                   Slug = x.Slug,
+                   UnitPrice = x.UnitPrice,
+
+               }).FirstOrDefaultAsync();
+               
         }
     }
 }

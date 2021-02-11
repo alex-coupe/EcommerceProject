@@ -19,65 +19,30 @@ namespace Gateway.Controllers
     public class GatewayController : ControllerBase
     {
         private IDataService<CategoryTransferObject> _categoriesService;
-        private IDataService<ProductTransferObject> _productsService;
+        private IDataService<CompositeProduct> _productsService;
         private IDataService<CartTransferObject> _cartService;
         private IDataService<Checkout> _checkoutService;
-        private IDataService<Review> _reviewService;
-        private IDataService<RelatedProduct> _relatedProductsService;
-        private IDataService<InventoryTransferObject> _inventoryService;
-     
+            
 
-        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<ProductTransferObject> productsService, IDataService<CartTransferObject> cartService,
-            IDataService<Checkout> checkoutService, IDataService<Review> reviewService, IDataService<RelatedProduct> relatedProductsService,
-            IDataService<InventoryTransferObject> inventoryService)
+        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<CompositeProduct> productsService, IDataService<CartTransferObject> cartService,
+            IDataService<Checkout> checkoutService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;
             _cartService = cartService;
             _checkoutService = checkoutService;
-            _reviewService = reviewService;
-            _relatedProductsService = relatedProductsService;
-            _inventoryService = inventoryService;
         }
 
         [HttpGet]
         [Route("v1/ProductDetails")]
-        public async Task<ActionResult<CompositeProduct>> GetProductDetails(string Slug)
+        public async Task<ActionResult<ProductTransferObject>> GetProductDetails(string Slug)
         {
            
             try
             {
-                var productTask = Task.Run(() => _productsService.Get(Slug));
-                //  var reviewsTask = Task.Run(() => _reviewService.GetAll(new string[] { Slug }));
-                // var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(new string[] { Slug }));
-                var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
-
-                await Task.WhenAll(productTask);//, reviewsTask, relatedProductsTask, inventoryTask);
-
-                var product = await productTask;
-               // var reviews = await reviewsTask;
-              //  var relatedProducts = await relatedProductsTask;
-              //  var inventory = await inventoryTask;
-
-                var CompositeProduct = new CompositeProduct
-                {
-                    ProductDetails = product
-               /*     Reviews = reviews.Select(review => new Review
-                    {
-                        Rating = review.Rating,
-                        ReviewBody = review.ReviewBody,
-                        Id = review.Id,
-                        ReviewDate = review.ReviewDate,
-                        ReviewerName = review.ReviewerName
-                    }).ToList(),
-                    RelatedProducts = relatedProducts.Select(relpr => new RelatedProduct
-                    {
-                        ProductDetails = relpr.ProductDetails,
-                    }).ToList(),
-                    Inventory = inventory
-               */
-                };
-                return Ok(CompositeProduct);
+                var product = await _productsService.Get(Slug);
+               
+                return Ok(product);
             }
             catch (Exception ex)
             {
@@ -88,19 +53,15 @@ namespace Gateway.Controllers
        
         [HttpGet]
         [Route("v1/CategoryProducts/{Category}/{SubCategory}")]
-        public async Task<ActionResult<IEnumerable<CompositeProduct>>> GetCategoryProducts(string Category, string SubCategory)
+        public async Task<ActionResult<IEnumerable<ProductTransferObject>>> GetCategoryProducts(string Category, string SubCategory)
         {
-            var CompositeProducts = new List<CompositeProduct>();
-
+            
             try
             {
                 var products = await _productsService.GetAll(new string[] { Category, SubCategory });
 
-                CompositeProducts = products.Select(details => new CompositeProduct
-                {
-                    ProductDetails = details
-                }).ToList();
-                return Ok(CompositeProducts);
+                
+                return Ok(products);
             }
             catch (Exception ex)
             {
@@ -144,7 +105,7 @@ namespace Gateway.Controllers
 
         [HttpPost]
         [Route("v1/Products")]
-        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, [FromForm] ProductTransferObject newProduct)
+        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, [FromForm] CompositeProduct newProduct)
         {
             try
             {

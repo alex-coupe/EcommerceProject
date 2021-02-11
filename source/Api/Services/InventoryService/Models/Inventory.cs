@@ -9,6 +9,8 @@ namespace InventoryService.Models
     {
         public int Id { get; set; }
 
+        public int ProductId { get; set; }
+
         public int Sku { get; set; }
 
         public int TotalStock { get; set; }

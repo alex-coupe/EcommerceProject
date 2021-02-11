@@ -1,4 +1,6 @@
-﻿using Gateway.DataTransfer.ProductService;
+﻿using Gateway.DataTransfer.InventoryService;
+using Gateway.DataTransfer.ProductService;
+using Gateway.DataTransfer.RelatedProductService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Interfaces;
@@ -19,13 +21,19 @@ namespace ProductService.Controllers
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IImageRepository _imageRepository;
-      
-      
-        public ProductServiceController(IProductRepository productRepository, ICategoryRepository categoryRepository, IImageRepository imageRepository)
+        private IReviewServiceClient _reviewService;
+        private IRelatedProductServiceClient _relatedProductService;
+        private IInventoryServiceClient _inventoryService;
+
+        public ProductServiceController(IProductRepository productRepository, ICategoryRepository categoryRepository, IImageRepository imageRepository,
+            IReviewServiceClient reviewService, IRelatedProductServiceClient relatedProductService, IInventoryServiceClient inventoryService)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _imageRepository = imageRepository;
+            _reviewService = reviewService;
+            _relatedProductService = relatedProductService;
+            _inventoryService = inventoryService;
         }
 
         [HttpGet]
@@ -39,16 +47,39 @@ namespace ProductService.Controllers
 
         [HttpGet]
         [Route("v1/products/{slug}")]
-        public async Task<ActionResult<ProductTransferObject>> GetProduct(string slug)
+        public async Task<ActionResult<CompositeProduct>> GetProduct(string slug)
         {
             var product = await _productRepository.GetOne(slug);
 
-            if (product != null)
+            var reviewsTask = Task.Run(() => _reviewService.GetReviews(product.Id));
+            var relatedProductsTask = Task.Run(() => _relatedProductService.GetRelatedProducts(product.Id));
+            var inventoryTask = Task.Run(() => _inventoryService.GetInventoryForProduct(product.Id));
+
+            await Task.WhenAll(reviewsTask, relatedProductsTask, inventoryTask);
+
+            var reviews = await reviewsTask;
+            var relatedProducts =  await relatedProductsTask;
+            var inventory =  await inventoryTask;
+
+            var CompositeProduct = new CompositeProduct
             {
-             
-                return Ok(product);
+                ProductDetails = product,
+                Reviews = reviews,
+                Inventory = inventory
+            };
+
+            var relatedProductsList = new List<ProductTransferObject>();
+
+            foreach (var entry in relatedProducts)
+            {
+                var relatedProduct = await _productRepository.GetProductById(entry.RelatedProductId);
+
+                relatedProductsList.Add(relatedProduct);
             }
-            return NotFound();
+
+            CompositeProduct.RelatedProducts = relatedProductsList;
+
+            return Ok(CompositeProduct);
         }
 
         [HttpGet]

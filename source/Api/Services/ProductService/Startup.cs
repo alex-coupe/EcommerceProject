@@ -1,3 +1,5 @@
+using Gateway.DataServices;
+using Gateway.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using ProductService.Interfaces;
 using ProductService.Models;
 using ProductService.Repositories;
+using ProductService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +35,15 @@ namespace ProductService
         {
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddHttpClient();
+            services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+            services.AddScoped<IReviewServiceClient, ReviewServiceClient>();
+            services.AddScoped<IRelatedProductServiceClient, RelatedProductServiceClient>();
+            services.AddScoped<IInventoryServiceClient, InventoryServiceClient>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

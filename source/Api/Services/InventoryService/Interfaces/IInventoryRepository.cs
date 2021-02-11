@@ -9,6 +9,7 @@ namespace InventoryService.Interfaces
     public interface IInventoryRepository
     {
         Task<Inventory> Get(int Sku);
+        Task<IEnumerable<Inventory>> GetAll(int id);
 
         void Create(Inventory inventory);
 

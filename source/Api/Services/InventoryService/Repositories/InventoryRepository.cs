@@ -27,6 +27,13 @@ namespace InventoryService.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Inventory>> GetAll(int productId)
+        {
+            return await _context.Inventory.AsNoTracking()
+                .Where(x => x.ProductId == productId)
+                .ToListAsync();
+        }
+
         public void Remove(int Sku)
         {
             var item = _context.Inventory.Find(Sku);

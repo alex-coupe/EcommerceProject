@@ -13,6 +13,8 @@ namespace ProductService.Interfaces
 
         Task<ProductTransferObject> GetOne(string slug);
 
+        Task<ProductTransferObject> GetProductById(int productId);
+
         void Create(Product product);
 
         void Update(Product product);

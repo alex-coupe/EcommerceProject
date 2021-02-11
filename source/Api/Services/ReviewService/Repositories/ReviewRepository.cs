@@ -28,9 +28,9 @@ namespace ReviewService.Repositories
                .ToListAsync();
         }
 
-        public Task<int> SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
     }
 }

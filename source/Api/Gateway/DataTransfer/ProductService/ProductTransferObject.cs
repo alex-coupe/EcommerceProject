@@ -8,8 +8,8 @@ namespace Gateway.DataTransfer.ProductService
 {
     public class ProductTransferObject
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-
 
         public string Description { get; set; }
 

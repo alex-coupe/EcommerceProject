@@ -21,19 +21,11 @@ namespace InventoryService.Controllers
 
         [HttpGet]
         [Route("v1/StockDetails")]
-        public async Task<ActionResult<InventoryTransferObject>> GetStockDetails(InventoryTransferObject transferObject)
+        public async Task<ActionResult<IEnumerable<InventoryTransferObject>>> GetStockDetails(int productId)
         {
-            var item = await _inventoryRepository.Get(transferObject.Sku);
+            var inventory = await _inventoryRepository.GetAll(productId);
 
-            var availableStock = item.TotalStock - item.ReservedStock;
-
-            transferObject.AvailableStock = availableStock;
-            transferObject.ReservedStock = item.ReservedStock;
-            transferObject.TimeToRestock = item.DeliveryTime;
-            transferObject.TotalStock = item.TotalStock;
-            
-
-            return Ok();
+            return Ok(inventory);
         }
 
         [HttpPost]

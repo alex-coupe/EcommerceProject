@@ -1,6 +1,8 @@
 using Gateway.DataServices;
 using Gateway.Interfaces;
+using InventoryService.Interfaces;
 using InventoryService.Models;
+using InventoryService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +37,7 @@ namespace InventoryService
 
             services.AddHttpClient();
             services.AddScoped<IHttpService, HttpService>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

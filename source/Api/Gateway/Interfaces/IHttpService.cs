@@ -12,7 +12,7 @@ namespace Gateway.Interfaces
 
         Task<T> Post<T>(string uri, object value);
 
-        Task<T> PostForm<T>(string uri, IFormFile file, IFormCollection form);
+        Task<T> PostForm<T>(string uri, IFormFile file, T form);
 
         Task<T> Put<T>(string uri, object value);
 

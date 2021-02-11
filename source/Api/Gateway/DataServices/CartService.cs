@@ -37,7 +37,7 @@ namespace Gateway.DataServices
             return await _httpService.Post<CartTransferObject>($"{baseUri}api/v1/cart", entity);
         }
 
-        public Task<CartTransferObject> PostForm(IFormFile file, IFormCollection form)
+        public Task<CartTransferObject> PostForm(IFormFile file, CartTransferObject form)
         {
             throw new NotImplementedException();
         }

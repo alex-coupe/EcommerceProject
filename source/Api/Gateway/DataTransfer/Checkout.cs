@@ -1,4 +1,5 @@
 ﻿using Gateway.DataModels.Components;
+using Gateway.DataTransfer.CartService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Gateway.DataModels
     public class Checkout
     {
         public int Id { get; set; }
-        public Cart Cart { get; set; }
+        public CartTransferObject Cart { get; set; }
 
         public decimal DeliveryCost { get; set; }
 

@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Gateway.Interfaces;
 using Gateway.DataTransfer.ProductService;
+using Gateway.DataTransfer.CartService;
 
 namespace Gateway.Controllers
 {
@@ -18,17 +19,16 @@ namespace Gateway.Controllers
     {
         private IDataService<CategoryTransferObject> _categoriesService;
         private IDataService<ProductTransferObject> _productsService;
-        private IDataService<Cart> _cartService;
+        private IDataService<CartTransferObject> _cartService;
         private IDataService<Checkout> _checkoutService;
         private IDataService<Review> _reviewService;
         private IDataService<RelatedProduct> _relatedProductsService;
         private IDataService<Inventory> _inventoryService;
-        private IDataService<ImageTransferObject> _imageService;
-       
+     
 
-        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<ProductTransferObject> productsService, IDataService<Cart> cartService,
+        public GatewayController(IDataService<CategoryTransferObject> categoriesService, IDataService<ProductTransferObject> productsService, IDataService<CartTransferObject> cartService,
             IDataService<Checkout> checkoutService, IDataService<Review> reviewService, IDataService<RelatedProduct> relatedProductsService,
-            IDataService<Inventory> inventoryService,  IDataService<ImageTransferObject> imageService)
+            IDataService<Inventory> inventoryService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;
@@ -37,7 +37,6 @@ namespace Gateway.Controllers
             _reviewService = reviewService;
             _relatedProductsService = relatedProductsService;
             _inventoryService = inventoryService;
-            _imageService = imageService;
         }
 
         [HttpGet]
@@ -144,11 +143,11 @@ namespace Gateway.Controllers
 
         [HttpPost]
         [Route("v1/Products")]
-        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, IFormCollection form)
+        public async Task<ActionResult<ProductTransferObject>> PostProduct(IFormFile file, [FromForm] ProductTransferObject newProduct)
         {
             try
             {
-                var response = await _productsService.PostForm(file, form);
+                var response = await _productsService.PostForm(file, newProduct);
 
                 return Ok(response);
             }

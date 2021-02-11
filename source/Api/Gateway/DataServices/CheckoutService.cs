@@ -37,7 +37,7 @@ namespace Gateway.DataServices
             return await _httpService.Post<Checkout>($"{baseUri}api/v1/checkout", entity);
         }
 
-        public Task<Checkout> PostForm(IFormFile file, IFormCollection form)
+        public Task<Checkout> PostForm(IFormFile file, Checkout form)
         {
             throw new NotImplementedException();
         }

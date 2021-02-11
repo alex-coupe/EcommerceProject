@@ -100,10 +100,9 @@ namespace ProductService.Controllers
 
         [HttpPost]
         [Route("v1/products")]
-        public async Task<ActionResult<ProductTransferObject>> CreateProduct(IFormFile file, IFormCollection form)
+        public async Task<ActionResult<ProductTransferObject>> CreateProduct(IFormFile file)
         {
-            var test = (form["form"]);
-            var productInput = JsonSerializer.Deserialize<ProductTransferObject>(form["form"]);
+            var newProduct = JsonSerializer.Deserialize<ProductTransferObject>(Request.Form["product-details"]);
             string[] permittedExtensions = { ".gif", ".png", ".jpeg", ".jpg", ".webp" };
             var _fileSizeLimit = 5000000;
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -122,7 +121,7 @@ namespace ProductService.Controllers
            
                 var image = new Image
                 {
-                    AltText = productInput.AltText,
+                    AltText = newProduct.AltText,
                     FileName = fileName,
                     FilePath = filePath
                 };
@@ -132,23 +131,23 @@ namespace ProductService.Controllers
 
                 var product = new Product
                 {
-                    Name = productInput.Name,
-                    Sku = productInput.Sku,
-                    Description = productInput.Description,
+                    Name = newProduct.Name,
+                    Sku = newProduct.Sku,
+                    Description = newProduct.Description,
                     ProductImageId = image.Id,
-                    Slug = productInput.Slug,
-                    UnitPrice = productInput.UnitPrice,
-                    Category = productInput.Category,
-                    SubCategory = productInput.SubCategory
+                    Slug = newProduct.Slug,
+                    UnitPrice = newProduct.UnitPrice,
+                    Category = newProduct.Category,
+                    SubCategory = newProduct.SubCategory
                 };
 
-                productInput.ImagePath = fullPath;
+                newProduct.ImagePath = fullPath;
 
                 _productRepository.Create(product);
                 await _productRepository.SaveChanges();
                 
 
-                return CreatedAtAction("CreateProduct", productInput);
+                return CreatedAtAction("CreateProduct", newProduct);
             }
             catch(Exception e)
             {

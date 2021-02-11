@@ -37,7 +37,6 @@ namespace Gateway
             services.AddScoped<IDataService<RelatedProduct>, RelatedProductService>();
             services.AddScoped<IDataService<Review>, ReviewService>();
             services.AddScoped<IDataService<Checkout>, CheckoutService>();
-            services.AddScoped<IDataService<ImageTransferObject>, ImageService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -1,4 +1,5 @@
 ﻿using Gateway.DataModels;
+using Gateway.DataTransfer;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -41,7 +42,7 @@ namespace Gateway.DataServices
             return await sendRequest<T>(request);
         }
 
-        public async Task<T> PostForm<T>(string uri, IFormFile file, IFormCollection form)
+        public async Task<T> PostForm<T>(string uri, IFormFile file, T form)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             if (file != null && file.Length > 0)
@@ -53,19 +54,12 @@ namespace Gateway.DataServices
                 
                 ByteArrayContent bytes = new ByteArrayContent(data);
 
-                var dict = new Dictionary<string, string>();
 
-                foreach (var key in form.Keys)
-                {
-                    dict.Add(key, form[key]);
-                }
-
-                HttpContent DictionaryItems = new FormUrlEncodedContent(dict);
-
+                string jsonString = JsonSerializer.Serialize(form);
                 MultipartFormDataContent multiContent = new MultipartFormDataContent();
 
                 multiContent.Add(bytes, "file", file.FileName);
-                multiContent.Add(DictionaryItems, "form");
+                multiContent.Add(new StringContent(jsonString), "product-details");
 
                 request.Content = multiContent;
 

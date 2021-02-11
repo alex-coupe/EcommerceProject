@@ -16,6 +16,6 @@ namespace Gateway.Interfaces
         Task<T> Put(T entity);
 
         Task Delete(string slug);
-        Task<T> PostForm(IFormFile file, IFormCollection form);
+        Task<T> PostForm(IFormFile file, T values);
     }
 }

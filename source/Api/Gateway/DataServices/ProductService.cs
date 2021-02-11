@@ -43,9 +43,9 @@ namespace Gateway.DataServices
             return await _httpService.Post<ProductTransferObject>($"{baseUri}api/productservice/v1/products", entity);
         }
 
-        public async Task<ProductTransferObject> PostForm(IFormFile file, IFormCollection form)
+        public async Task<ProductTransferObject> PostForm(IFormFile file, ProductTransferObject product)
         {
-            return await _httpService.PostForm<ProductTransferObject>($"{baseUri}api/productservice/v1/products/", file, form);
+            return await _httpService.PostForm<ProductTransferObject>($"{baseUri}api/productservice/v1/products/", file, product);
         }
 
         public async Task<ProductTransferObject> Put(ProductTransferObject entity)

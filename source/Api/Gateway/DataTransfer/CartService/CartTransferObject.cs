@@ -1,5 +1,4 @@
-﻿using Gateway.DataModels.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace Gateway.DataTransfer.CartService
     {
         public string Id { get; set; }
 
-        public IEnumerable<CartItem> CartItems { get; set; }
+        public IEnumerable<CartItemTransferObject> CartItems { get; set; }
 
         public decimal Net { get; set; }
 

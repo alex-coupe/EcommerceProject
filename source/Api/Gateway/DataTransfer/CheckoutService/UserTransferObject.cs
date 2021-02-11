@@ -1,12 +1,11 @@
-﻿using Gateway.DataModels.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.DataModels
+namespace Gateway.DataTransfer.CheckoutService
 {
-    public class User
+    public class UserTransferObject
     {
         public string FirstName { get; set; }
 
@@ -14,6 +13,6 @@ namespace Gateway.DataModels
 
         public string EmailAddress { get; set; }
 
-        public Address Address { get; set; }
+        public AddressTransferObject Address { get; set; }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.DataModels.Components
+namespace Gateway.DataTransfer.CheckoutService
 {
-    public class Address
+    public class AddressTransferObject
     {
         public string FirstLine { get; set; }
 

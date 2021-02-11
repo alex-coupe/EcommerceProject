@@ -1,10 +1,7 @@
-﻿using Gateway.DataModels.Components;
-using Gateway.DataTransfer.ProductService;
+﻿using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gateway.DataServices

@@ -1,16 +1,11 @@
-﻿using Gateway.DataModels;
-using Gateway.DataModels.Components;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Gateway.Interfaces;
 using Gateway.DataTransfer.ProductService;
-using Gateway.DataTransfer.CartService;
-using Gateway.DataTransfer.InventoryService;
+using Gateway.DataTransfer.CheckoutService;
 
 namespace Gateway.Controllers
 {
@@ -21,11 +16,11 @@ namespace Gateway.Controllers
         private IDataService<CategoryTransferObject> _categoriesService;
         private IProductService _productsService;
         private ICartService _cartService;
-        private IDataService<Checkout> _checkoutService;
+        private IDataService<CheckoutTransferObject> _checkoutService;
             
 
         public GatewayController(IDataService<CategoryTransferObject> categoriesService, IProductService productsService, ICartService cartService,
-            IDataService<Checkout> checkoutService)
+            IDataService<CheckoutTransferObject> checkoutService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;

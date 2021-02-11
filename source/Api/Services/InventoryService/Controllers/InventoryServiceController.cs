@@ -1,4 +1,5 @@
-﻿using Gateway.DataTransfer.InventoryService;
+﻿using Gateway.DataTransfer.CheckoutService;
+using Gateway.DataTransfer.InventoryService;
 using InventoryService.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,14 +50,32 @@ namespace InventoryService.Controllers
                     item.ReservedStock-= transferObject.TransactionCount;
                     await _inventoryRepository.SaveChanges();
                     return Ok();
-                case "CHECKOUT":
-                    item.ReservedStock -= transferObject.TransactionCount;
-                    item.TotalStock -= transferObject.TransactionCount;
-                    await _inventoryRepository.SaveChanges();
-                    return Ok();
             }
 
             return BadRequest();
+        }
+
+        [HttpPatch]
+        [Route("v1/ConvertToOrder")]
+        public async Task<ActionResult> ConvertToOrder(CheckoutTransferObject checkoutTransferObject)
+        {
+            bool success = false;
+
+            foreach(var item in checkoutTransferObject.Cart.CartItems)
+            {
+                var record = await _inventoryRepository.Get(item.Sku);
+                if (record.TotalStock >= item.Quantity)
+                {
+                    record.TotalStock -= item.Quantity;
+                    record.ReservedStock -= item.Quantity;
+                }
+                return BadRequest(new { Success = success });
+            }
+            await _inventoryRepository.SaveChanges();
+
+            success = true;
+
+            return Ok(new { Success = success });
         }
     }
 }

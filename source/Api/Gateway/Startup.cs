@@ -1,7 +1,6 @@
-using Gateway.DataModels;
-using Gateway.DataModels.Components;
 using Gateway.DataServices;
 using Gateway.DataTransfer.CartService;
+using Gateway.DataTransfer.CheckoutService;
 using Gateway.DataTransfer.InventoryService;
 using Gateway.DataTransfer.ProductService;
 using Gateway.Interfaces;
@@ -34,7 +33,7 @@ namespace Gateway
             services.AddScoped<IDataService<CategoryTransferObject>, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICartService, CartService>();          
-            services.AddScoped<IDataService<Checkout>, CheckoutService>();
+            services.AddScoped<IDataService<CheckoutTransferObject>, CheckoutService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

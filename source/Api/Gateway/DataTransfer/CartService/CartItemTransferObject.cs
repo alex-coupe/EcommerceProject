@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Gateway.DataTransfer.CartService
 {
-    public class CartItem
+    public class CartItemTransferObject
     {
         public int Id { get; set; }
         public string CartId { get; set; }

@@ -1,10 +1,5 @@
-﻿using Gateway.DataModels;
-using Gateway.DataTransfer.CartService;
+﻿using Gateway.DataTransfer.CartService;
 using Gateway.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gateway.DataServices

@@ -19,7 +19,7 @@ namespace CartService.Services
 
         public async Task<decimal> GetItemBasePrice(int Sku)
         {
-            return await _httpService.Get<decimal>($"{baseUri}api/v1/products/price/{Sku}");
+            return await _httpService.Get<decimal>($"{baseUri}api/productservice/v1/product/price?id={Sku}");
         }
     }
 }

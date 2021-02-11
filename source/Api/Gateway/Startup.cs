@@ -33,7 +33,7 @@ namespace Gateway
             services.AddScoped<IDataService<CategoryTransferObject>, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICartService, CartService>();          
-            services.AddScoped<IDataService<CheckoutTransferObject>, CheckoutService>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

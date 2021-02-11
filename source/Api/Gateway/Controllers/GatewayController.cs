@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Gateway.Interfaces;
 using Gateway.DataTransfer.ProductService;
 using Gateway.DataTransfer.CheckoutService;
+using Gateway.DataTransfer.CartService;
 
 namespace Gateway.Controllers
 {
@@ -16,11 +17,11 @@ namespace Gateway.Controllers
         private IDataService<CategoryTransferObject> _categoriesService;
         private IProductService _productsService;
         private ICartService _cartService;
-        private IDataService<CheckoutTransferObject> _checkoutService;
+        private ICheckoutService _checkoutService;
             
 
         public GatewayController(IDataService<CategoryTransferObject> categoriesService, IProductService productsService, ICartService cartService,
-            IDataService<CheckoutTransferObject> checkoutService)
+            ICheckoutService checkoutService)
         {
             _categoriesService = categoriesService;
             _productsService = productsService;
@@ -79,10 +80,10 @@ namespace Gateway.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        /*
+       
         [HttpGet]
         [Route("v1/Cart")]
-        public async Task<ActionResult<Cart>> GetCart(string cartId)
+        public async Task<ActionResult<CartTransferObject>> GetCart(string cartId)
         {
             try
             {
@@ -96,7 +97,7 @@ namespace Gateway.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        */
+       
 
         [HttpPost]
         [Route("v1/Products")]
@@ -129,40 +130,17 @@ namespace Gateway.Controllers
             }
         }
 
-        /*
-        [HttpPost]
-        [Route("v1/Reviews")]
-        public async Task<ActionResult<Review>> PostReview(Review review)
-        {
-            try
-            {
-                var response = await _reviewService.Post(review);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+       
 
         [HttpPost]
         [Route("v1/Checkout")]
-        public async Task<ActionResult> PostCheckout(Checkout checkout)
+        public async Task<ActionResult<OrderConfirmationTransferObject>> PostCheckout(CheckoutTransferObject checkout)
         {
             try
             {
-                var response = await _checkoutService.Post(checkout);
-                
-                return Ok(new OrderConfirmation
-                {
-                    Id = response.Id,
-                    DeliveryCost = response.DeliveryCost,
-                    DeliveryTax = response.DeliveryTax,
-                    OrderDate = DateTime.Now,
-                    OrderItems = response.Cart.CartItems,
-                    Total = response.Total
-                });
+                var response = await _checkoutService.PostOrder(checkout);
+                return Ok(response);
+              
             }
             catch(Exception ex)
             {
@@ -172,7 +150,7 @@ namespace Gateway.Controllers
              
         [HttpPost]
         [Route("v1/Cart")]
-        public async Task<ActionResult> UpdateCart(Cart cart)
+        public async Task<ActionResult<CartTransferObject>> UpdateCart(CartTransferObject cart)
         {            
             try
             {
@@ -186,6 +164,6 @@ namespace Gateway.Controllers
             }
         }
 
-        */
+        
     }
 }

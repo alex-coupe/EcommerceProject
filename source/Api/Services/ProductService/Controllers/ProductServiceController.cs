@@ -83,13 +83,13 @@ namespace ProductService.Controllers
         }
 
         [HttpGet]
-        [Route("v1/product/price/{slug}")]
-        public async Task<ActionResult> GetPrice(string slug)
+        [Route("v1/product/price/")]
+        public async Task<ActionResult> GetPrice(int id)
         {
-            var product = await _productRepository.GetOne(slug);
+            var product = await _productRepository.GetProductById(id);
 
             if (product != null)
-                return Ok(new { UnitPrice = product.UnitPrice });
+                return Ok(product.UnitPrice );
 
             return NotFound();
         }

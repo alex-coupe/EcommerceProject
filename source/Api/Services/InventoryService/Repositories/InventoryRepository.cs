@@ -22,7 +22,7 @@ namespace InventoryService.Repositories
 
         public async Task<Inventory> Get(int Sku)
         {
-            return await _context.Inventory.AsNoTracking()
+            return await _context.Inventory
                 .Where(x => x.Sku == Sku)
                 .FirstOrDefaultAsync();
         }

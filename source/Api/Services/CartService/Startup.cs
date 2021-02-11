@@ -39,7 +39,9 @@ namespace CartService
             services.AddHttpClient();
             services.AddScoped<IHttpService, HttpService>();
             services.AddScoped<IProductServiceClient, ProductServiceClient>();
+            services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

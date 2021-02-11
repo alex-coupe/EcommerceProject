@@ -6,7 +6,7 @@ namespace Gateway.DataServices
 {
     public class CartService : ICartService
     {
-        private string baseUri = "https://localhost:44378";
+        private string baseUri = "https://localhost:44378/";
         private IHttpService _httpService;
         public CartService(IHttpService httpService)
         {
@@ -16,12 +16,12 @@ namespace Gateway.DataServices
 
         public async Task<CartTransferObject> Get(string slug)
         {
-            return await _httpService.Get<CartTransferObject>($"{baseUri}api/v1/cart/{slug}");
+            return await _httpService.Get<CartTransferObject>($"{baseUri}api/cartservice/v1/getcart?cartId={slug}");
         }
 
         public async Task<CartTransferObject> Post(CartTransferObject entity)
         {
-            return await _httpService.Post<CartTransferObject>($"{baseUri}api/v1/cart", entity);
+            return await _httpService.Post<CartTransferObject>($"{baseUri}api/cartservice/v1/updatecart", entity);
         }
               
        

@@ -31,7 +31,7 @@ namespace InventoryService.Controllers
 
         [HttpPost]
         [Route("v1/UpdateStock")]
-        public async Task<ActionResult> ReserveStock(InventoryTransferObject transferObject)
+        public async Task<ActionResult> UpdateStock(InventoryTransferObject transferObject)
         {
             var item = await _inventoryRepository.Get(transferObject.Sku);
 
@@ -43,13 +43,13 @@ namespace InventoryService.Controllers
                     {
                         item.ReservedStock = reservedTotal;
                         await _inventoryRepository.SaveChanges();
-                        return Ok();
+                        return Ok(transferObject);
                     }
                     return BadRequest();
                 case "FREE":
                     item.ReservedStock-= transferObject.TransactionCount;
                     await _inventoryRepository.SaveChanges();
-                    return Ok();
+                    return Ok(transferObject);
             }
 
             return BadRequest();

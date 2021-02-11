@@ -1,12 +1,12 @@
-﻿using CheckoutService.Interfaces;
-using Gateway.DataTransfer.CheckoutService;
+﻿using CartService.Interfaces;
+using Gateway.DataTransfer.InventoryService;
 using Gateway.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CheckoutService.Services
+namespace CartService.Services
 {
     public class InventoryService : IInventoryService
     {
@@ -16,9 +16,9 @@ namespace CheckoutService.Services
         {
             _httpService = httpService;
         }
-        public async Task<bool> Post(CheckoutTransferObject entity)
+        public async Task ReserveStock(InventoryTransferObject inventoryTransferObject)
         {
-             return await _httpService.Post<bool>($"{baseUri}api/inventoryservice/v1/converttoorder", entity);
+             await _httpService.Post<InventoryTransferObject>($"{baseUri}api/inventoryservice/v1/updatestock", inventoryTransferObject);
         }
     }
 }

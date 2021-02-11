@@ -50,7 +50,7 @@ namespace Gateway.Controllers
                 var productTask = Task.Run(() => _productsService.Get(Slug));
                 //  var reviewsTask = Task.Run(() => _reviewService.GetAll(new string[] { Slug }));
                 // var relatedProductsTask =  Task.Run(() => _relatedProductsService.GetAll(new string[] { Slug }));
-                //  var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
+                var inventoryTask = Task.Run(() => _inventoryService.Get(Slug));
 
                 await Task.WhenAll(productTask);//, reviewsTask, relatedProductsTask, inventoryTask);
 

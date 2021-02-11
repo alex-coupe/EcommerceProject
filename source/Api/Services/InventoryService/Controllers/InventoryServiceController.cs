@@ -57,6 +57,11 @@ namespace InventoryService.Controllers
                     item.ReservedStock-= transferObject.TransactionCount;
                     await _inventoryRepository.SaveChanges();
                     return Ok();
+                case "CHECKOUT":
+                    item.ReservedStock -= transferObject.TransactionCount;
+                    item.TotalStock -= transferObject.TransactionCount;
+                    await _inventoryRepository.SaveChanges();
+                    return Ok();
             }
 
             return BadRequest();

@@ -13,6 +13,8 @@ namespace Gateway.DataTransfer.CartService
 
         public decimal Net { get; set; }
 
+        public int TotalItems { get; set; }
+
         public decimal Tax { get; set; }
 
         public decimal Gross { get; set; }

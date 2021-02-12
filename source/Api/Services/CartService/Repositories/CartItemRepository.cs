@@ -1,5 +1,6 @@
 ﻿using CartService.Interfaces;
 using CartService.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,11 @@ namespace CartService.Repositories
         public void Update(CartItem cartItem)
         {
             _context.CartItems.Update(cartItem);
+        }
+
+        public EntityState GetEntityState(CartItem item)
+        {
+            return _context.Entry(item).State;
         }
     }
 }

@@ -55,11 +55,11 @@ namespace InventoryService.Controllers
             return BadRequest();
         }
 
-        [HttpPatch]
+        [HttpPost]
         [Route("v1/ConvertToOrder")]
         public async Task<ActionResult> ConvertToOrder(CheckoutTransferObject checkoutTransferObject)
         {
-            bool success = false;
+          
 
             foreach(var item in checkoutTransferObject.Cart.CartItems)
             {
@@ -69,13 +69,12 @@ namespace InventoryService.Controllers
                     record.TotalStock -= item.Quantity;
                     record.ReservedStock -= item.Quantity;
                 }
-                return BadRequest(new { Success = success });
             }
             await _inventoryRepository.SaveChanges();
 
-            success = true;
+           
 
-            return Ok(new { Success = success });
+            return Ok(true);
         }
     }
 }

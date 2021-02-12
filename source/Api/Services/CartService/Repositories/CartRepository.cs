@@ -22,7 +22,7 @@ namespace CartService.Repositories
 
         public async Task<Cart> Get(string cartId)
         {
-            return await  _context.Carts.AsNoTracking()
+            return await  _context.Carts
                 .Where(x => x.Id == cartId)
                 .Include(x => x.CartItems)
              .FirstOrDefaultAsync();

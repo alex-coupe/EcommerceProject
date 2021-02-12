@@ -8,7 +8,8 @@ namespace Gateway.DataTransfer.CartService
     public class CartItemTransferObject
     {
         public int Id { get; set; }
-        public string CartId { get; set; }
+
+        public int ProductId { get; set; }
         public int Sku { get; set; }
 
         public string Name { get; set; }

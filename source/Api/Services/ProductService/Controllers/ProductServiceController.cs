@@ -83,7 +83,7 @@ namespace ProductService.Controllers
         }
 
         [HttpGet]
-        [Route("v1/product/price/")]
+        [Route("v1/product/price")]
         public async Task<ActionResult> GetPrice(int id)
         {
             var product = await _productRepository.GetProductById(id);

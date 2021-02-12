@@ -15,6 +15,9 @@ namespace CartService.Models
         [Required]
         public string CartId { get; set; }
 
+        [Required]
+        public int ProductId { get; set; }
+
         public virtual Cart Cart { get; set; }
 
         [Required]

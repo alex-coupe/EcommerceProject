@@ -38,7 +38,7 @@ namespace CartService.Controllers
                 {
                     CartItems = cart.CartItems.Select(x => new CartItemTransferObject
                     {
-                        CartId = x.CartId,
+                        ProductId = x.ProductId,
                         GrossPrice = x.GrossPrice,
                         Id = x.Id,
                         Name = x.Name,
@@ -53,7 +53,8 @@ namespace CartService.Controllers
                     Id = cart.Id,
                     LastUpdated = cart.LastUpdated,
                     Net = cart.Net,
-                    Tax = cart.Tax
+                    Tax = cart.Tax,
+                    TotalItems = cart.ItemCount
                 };
                 return Ok(transferObject);
             }
@@ -80,7 +81,7 @@ namespace CartService.Controllers
                         TransactionType = "RESERVE",
                         TransactionCount = item.Quantity
                     });
-                    item.UnitPrice = await _productClient.GetItemBasePrice(item.Id);
+                    item.UnitPrice = await _productClient.GetItemBasePrice(item.ProductId);
                     item.NetPrice = item.UnitPrice * item.Quantity;
                     itemCount += item.Quantity;
                     net += (double)item.NetPrice;
@@ -118,6 +119,7 @@ namespace CartService.Controllers
                 cart.Gross = (decimal)gross;
                 cart.Net = (decimal)net;
                 cart.Tax = (decimal)tax;
+                cart.TotalItems = itemCount;
                 cart.CreatedDate = DateTime.Now;
                 cart.LastUpdated = DateTime.Now;
                
@@ -131,6 +133,7 @@ namespace CartService.Controllers
                 if (updateCart == null)
                     return NotFound();
 
+
                 foreach (var item in cart.CartItems)
                 {
                     item.NetPrice = item.UnitPrice * item.Quantity;
@@ -141,17 +144,36 @@ namespace CartService.Controllers
                     item.GrossPrice = item.NetPrice + item.Tax;
                     gross += (double)item.GrossPrice;
                 }
-                var cartUpdate = new Cart
+
+                updateCart.LastUpdated = DateTime.Now;
+                cart.LastUpdated = updateCart.LastUpdated;
+                cart.TotalItems = updateCart.ItemCount;
+                _cartRepository.Update(updateCart);
+                foreach(var item in updateCart.CartItems)
                 {
-                    Id = cart.Id,
-                    CreatedDate = DateTime.Now,
-                    Gross = (decimal)gross,
-                    ItemCount = itemCount,
-                    LastUpdated = DateTime.Now,
-                    Net = (decimal)net,
-                    Tax = (decimal)tax
-                };
-                _cartRepository.Update(cartUpdate);
+                    _cartItemRepository.Update(item);
+
+                    if (_cartItemRepository.GetEntityState(item) == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+                    {
+                        await _inventoryService.ReserveStock(new Gateway.DataTransfer.InventoryService.InventoryTransferObject
+                        {
+                            Sku = item.Sku,
+                            TransactionType = "FREE",
+                            TransactionCount = item.Quantity
+                        });
+                    }
+                    else if(_cartItemRepository.GetEntityState(item) == Microsoft.EntityFrameworkCore.EntityState.Added)
+                    {
+                        await _inventoryService.ReserveStock(new Gateway.DataTransfer.InventoryService.InventoryTransferObject
+                        {
+                            Sku = item.Sku,
+                            TransactionType = "RESERVE",
+                            TransactionCount = item.Quantity
+                        });
+                    }
+                }
+
+                
                 await _cartRepository.SaveChanges();
                 return Ok(cart);
             }

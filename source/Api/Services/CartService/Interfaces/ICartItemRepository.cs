@@ -1,4 +1,5 @@
 ﻿using CartService.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace CartService.Interfaces
     {
         void Create(CartItem cartItem);
         void Update(CartItem cartItem);
+
+        EntityState GetEntityState(CartItem item);
     }
 }

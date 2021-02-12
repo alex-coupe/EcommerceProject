@@ -11,7 +11,7 @@ namespace ProductService.Services
     public class ReviewServiceClient : IReviewServiceClient
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44356/";
+        private string baseUri = "http://review_service:5007/";
 
         public ReviewServiceClient(IHttpService httpService)
         {

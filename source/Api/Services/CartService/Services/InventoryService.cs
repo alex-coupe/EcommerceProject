@@ -11,7 +11,7 @@ namespace CartService.Services
     public class InventoryService : IInventoryService
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44311/";
+        private string baseUri = "http://inventory_service:5005/";
         public InventoryService(IHttpService httpService)
         {
             _httpService = httpService;

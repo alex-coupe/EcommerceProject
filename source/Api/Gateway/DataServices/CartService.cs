@@ -6,7 +6,7 @@ namespace Gateway.DataServices
 {
     public class CartService : ICartService
     {
-        private string baseUri = "https://localhost:44378/";
+        private string baseUri = "http://cart_service:5003/";
         private IHttpService _httpService;
         public CartService(IHttpService httpService)
         {

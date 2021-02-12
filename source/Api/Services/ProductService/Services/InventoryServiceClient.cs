@@ -11,7 +11,7 @@ namespace ProductService.Services
     public class InventoryServiceClient : IInventoryServiceClient
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44311/";
+        private string baseUri = "http://inventory_service:5005/";
 
         public InventoryServiceClient(IHttpService httpService)
         {

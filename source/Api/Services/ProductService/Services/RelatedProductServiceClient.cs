@@ -11,7 +11,7 @@ namespace ProductService.Services
     public class RelatedProductServiceClient : IRelatedProductServiceClient
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44391/";
+        private string baseUri = "http://relatedproduct_service:5006/";
 
         public RelatedProductServiceClient(IHttpService httpService)
         {

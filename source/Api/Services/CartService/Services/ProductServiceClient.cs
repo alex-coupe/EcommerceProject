@@ -10,7 +10,7 @@ namespace CartService.Services
     public class ProductServiceClient : IProductServiceClient
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44376/";
+        private string baseUri = "http://product_service:5001/";
 
         public ProductServiceClient(IHttpService httpService)
         {

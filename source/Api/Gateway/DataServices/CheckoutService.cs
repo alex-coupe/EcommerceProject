@@ -11,7 +11,7 @@ namespace Gateway.DataServices
     public class CheckoutService : ICheckoutService
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44301/";
+        private string baseUri = "http://checkout_service:5004/";
 
         public CheckoutService(IHttpService httpService)
         {

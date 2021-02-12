@@ -11,7 +11,7 @@ namespace Gateway.DataServices
     public class CategoryService : IDataService<CategoryTransferObject>
     {
         private IHttpService _httpService;
-        private string baseUri = "https://localhost:44376/";
+        private string baseUri = "http://products_service:5001/";
         public CategoryService(IHttpService httpService)
         {
             _httpService = httpService;
